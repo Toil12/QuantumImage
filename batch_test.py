@@ -1,3 +1,5 @@
 import numpy as np
-batch_index = [np.random.randint(0,4)]
-print(batch_index)
+import torch
+a=np.random.random((1,8,8))
+print(a)
+print(a.ravel())

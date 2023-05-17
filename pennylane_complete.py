@@ -7,7 +7,7 @@ import torch
 from torchvision import datasets, transforms
 import pennylane as qml
 
-dev = qml.device("default.qubit", wires=7,shots=2**20)
+dev = qml.device("default.qubit", wires=7,shots=1000)
 
 def encode_circuit(qubits_num, section_number, x):
     # print(qubits_num,section_number,parameters)
@@ -49,56 +49,69 @@ def circuit(weights,x,qubits_n=7,section_n=64):
                    x=x)
     for W in weights:
         ansatz_layer(W)
-    result=[qml.expval(qml.PauliZ(i)) for i in range(qubits_n)]
-    return result
+    # result=[qml.counts(qml.PauliZ(i)) for i in range(qubits_n)]
+    return qml.counts(qml.PauliZ(qubits_n-1))
 
-def variational_classifier(weights, bias, x):
-    parity_result=circuit(weights,x)
-    result=0
-    for i in range(len(parity_result)):
-        bit=parity_result[i]
-        if i==0:
-            if bit<0:
-                result=0
-            else:
-                result=1
-        if bit <0:
-            result=result^0
-        elif bit>0:
-            result=result^1
-    r=-1 if result==0 else 1
-    return r+bias
+def variational_classifier(weights, bias, X,flag=False):
+    batch_result=[]
+    even_count=0
+    odd_count=0
+    if not flag:
+        for x in X:
+            parity_result=circuit(weights,x)
+            distribution=parity_result._value
+            even_count+=distribution[1]
+            odd_count+=distribution[-1]
+        # select even_count as the type 1
+            batch_result.append(even_count/(even_count+odd_count))
+        return batch_result+bias
+    else:
+        for x in X:
+            parity_result=circuit(weights,x)
+            # print(parity_result)
+            distribution=parity_result
+            even_count+=distribution[1]
+            odd_count+=distribution[-1]
+        # select even_count as the type 1
+            batch_result.append(even_count/(even_count+odd_count))#[0.5,0.4,0.4,0.4,0.5]
+        return batch_result+bias
     # return circuit(weights, x) + bias
 
 def square_loss(labels, predictions):
     # print("labels and predicitons are ", labels, predictions)
     loss = 0
-    for l, p in zip(labels, predictions):
+    p=predictions._value
+    for l, p in zip(labels,p):
+        # print(l,p)
         loss = loss + (l - p) ** 2
-
     loss = loss / len(labels)
+    # print(loss)
     return loss
 
 def accuracy(labels, predictions):
-    # print(labels,predictions)
+    print(labels)
+    print(predictions)
     # print("labels and predicitons in acc are ", labels, predictions)
-    loss = 0
-    for l, p in zip(labels, predictions):
-        l=l.tolist()[0]
-        p=p[0]
+    accuracy_count = 0
+    # print(labels,predictions)
+    for label, prediction in zip(labels, predictions):
         # print(l,p)
-        if abs(l - p) < 1e-5:
-            loss = loss + 1
-    loss = loss / len(labels)
-    return loss
+        label=label.tolist()
+        prediction=prediction[0].tolist()
+        # print(label,prediction)
+        for l,p in zip(label,prediction):
+            # print("l,p are ",l,p)
+            if abs(l - p) <= 0.5:
+                accuracy_count = accuracy_count + 1
+    accuracy = accuracy_count / (len(labels)*len(labels[0]))
+    return accuracy
 
 def cost(weights, bias, X, Y):
-    # print(X,Y)
-    predictions = [variational_classifier(weights, bias, X)]
+    predictions = variational_classifier(weights, bias, X)
     # print("pre in cost is",predictions)
     return square_loss(Y, predictions)
 
-def get_images(n_samples:int=100,r:int=8,c:int=8):
+def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
     # Concentrating on the first 100 samples
     n_samples = n_samples
     rows=r
@@ -117,7 +130,7 @@ def get_images(n_samples:int=100,r:int=8,c:int=8):
     X_train.data = X_train.data[idx]
     X_train.targets = X_train.targets[idx]
 
-    train_loader = torch.utils.data.DataLoader(X_train, batch_size=1 , shuffle=False)
+    train_loader = torch.utils.data.DataLoader(X_train, batch_size=batch_size , shuffle=True)
 
 # test data
     n_samples = 50
@@ -166,7 +179,7 @@ def recover_image(quantam_encode:list,show=True):
     if show:
         plt.imshow(image, cmap='gray')
         print(image)
-        plt.savefig('images/q.jpg')
+        # plt.savefig('images/q.jpg')
         plt.show()
 
 def show_recoverd_image(file_name):
@@ -175,73 +188,58 @@ def show_recoverd_image(file_name):
     recover_image(r)
 
 def image_preprocessing(data:np.ndarray,image_size:int=64):
-    image = data
-    # print(image)
-    # fill circuit with angles
-    # print(circ.parameters)
-    test_number = 1
-    for i in range(test_number):
+    sequences=[]
+    for image in data:
+        # print(image)
+        # print(image.shape)
+        # fill circuit with angles
+        # print(circ.parameters)
+
         # set angles ans parameters
         image_sequence = image.ravel()
         # pre processing
         for pos in range(len(image_sequence)):
             image_sequence[pos] = image_sequence[pos] * pi / 2
         # print("complete image is",image_sequence)
-        return image_sequence
+        sequences.append(image_sequence)
+    sequences=np.array(sequences)
+    return sequences
 
 
 if __name__ == '__main__':
-    # print(encode_circuit(7,64,math.pi))
-    # print(qml.draw(encode_circuit)(7,64,"x"))
     sample_number=100
     train_loader, test_loader,image_size=get_images(n_samples=sample_number)
     train_images_q=np.empty([0],dtype=bool)
     train_loader_q=[]
 
-
     start_time=time.time()
     # initialize weights and bias
     weights_init = 0.01 * np.random.randn(1, 7, 3, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
-    opt = NesterovMomentumOptimizer(0.5)
+    opt = NesterovMomentumOptimizer(0.1)
     weights = weights_init
     bias = bias_init
     batch_size=5
     #start training
-    for epoch in range(20):
+    for epoch in range(1000):
+        print("starte epoch {}".format(epoch))
         predictions=[]
         targets=[]
         count = 0
         for batch_idx, (data, target) in enumerate(train_loader):
+            # image=data[0][0]
             targets.append(target)
-            image=data[0][0]
-
-            if target[0]==0:
-                target[0]=-1
-            # print("target is ", target[0])
-            # print(targets)
-    #image visualization
-            # plt.imshow(image,cmap='gray')
-            # plt.savefig('images/original.jpg')
-            # plt.show()
-    #quantum encode
-            encode_image=image_preprocessing(image)
-            image_name=str(batch_idx)+"_"+str(count)
-            # np.save("images/encode_images/{}.npy".format(image_name),encode_image)
-            # print(" store image {}, {} left".format(count, sample_number - count))
-            # print(encode_image)
-            # recover_image(encode_image)
-            # feeding data
-
-            weights, bias, _, _ = opt.step(cost, weights, bias, encode_image, target)
-            prediction = [np.sign(variational_classifier(weights, bias, encode_image))]
+            # print(target.shape)
+            encode_images=image_preprocessing(data)
+            # # print(encode_images.shape)
+            # # image_name=str(batch_idx)+"_"+str(count)
+            weights, bias, _, _ = opt.step(cost, weights, bias, encode_images, target)
+            prediction = [variational_classifier(weights, bias, encode_images,flag=True)]
+            # # print(prediction)
             predictions.append(prediction)
-            count+=1
-            # print("prediction is ", prediction)
-            if count>=batch_size:
-                break
-            else:
-                continue
+
+        # print(len(targets))
+        # print(len(predictions))
         acc = accuracy(targets, predictions)
         # c=cost(weights, bias, encode_image, target)
         print(
@@ -249,6 +247,7 @@ if __name__ == '__main__':
                 epoch + 1, acc
             )
         )
+        # break
     #
     #     np.save("images/targets.npy",targets)
     #     end_time=time.time()

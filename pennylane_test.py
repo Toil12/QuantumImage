@@ -61,7 +61,7 @@ def get_images(n_samples:int=100,r:int=8,c:int=8):
     X_train.data = X_train.data[idx]
     X_train.targets = X_train.targets[idx]
 
-    train_loader = torch.utils.data.DataLoader(X_train, batch_size=1 , shuffle=False)
+    train_loader = torch.utils.data.DataLoader(X_train, batch_size=5 , shuffle=False)
 
 # test data
     n_samples = 50
@@ -76,7 +76,7 @@ def get_images(n_samples:int=100,r:int=8,c:int=8):
     X_test.data = X_test.data[idx]
     X_test.targets = X_test.targets[idx]
 
-    test_loader = torch.utils.data.DataLoader(X_test, batch_size=1, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(X_test, batch_size=5, shuffle=True)
     n_samples_show = 6
     return train_loader,test_loader,rows*cols
 
@@ -164,20 +164,21 @@ if __name__ == '__main__':
     start_time=time.time()
     for batch_idx, (data, target) in enumerate(train_loader):
         targets.append(target)
+        print(data.shape)
         image=data[0][0]
 #image visualization
-        # plt.imshow(image,cmap='gray')
+        plt.imshow(image,cmap='gray')
         # plt.savefig('images/original.jpg')
-        # plt.show()
+        plt.show()
 #quantum encode
-        encode_image=quantum_image_encode(data=image,
-                                          image_size=image_size)
-        image_name=str(batch_idx)+"_"+str(count)
+        # encode_image=quantum_image_encode(data=image,
+        #                                   image_size=image_size)
+        # image_name=str(batch_idx)+"_"+str(count)
         # np.save("images/encode_images/{}.npy".format(image_name),encode_image)
-        print(" store image {}, {} left".format(count, sample_number - count))
-        count+=1
-        print(encode_image)
-        recover_image(encode_image)
+        # print(" store image {}, {} left".format(count, sample_number - count))
+        # count+=1
+        # print(encode_image)
+        # recover_image(encode_image)
         break
 #
 #     np.save("images/targets.npy",targets)
