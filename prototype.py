@@ -1,48 +1,101 @@
-import math
-import time
-import random
-
-import numpy as np
 import pennylane as qml
-from qiskit import Aer
-import matplotlib.pyplot as plt
-from math import pi
-dev = qml.device("default.qubit", wires=7,shots=2**20)
+from pennylane import numpy as np
+from pennylane.optimize import NesterovMomentumOptimizer
 
-@qml.qnode(dev, interface='torch')
-def encode_circuit(qubits_num,section_number,parameters):
-    # print(qubits_num,section_number,parameters)
-    wires=[x for x in range(qubits_num)]
-    # set H gates
-    for wire in wires[0:-1]:
-        qml.Hadamard(wire)
-    # for each pixel set circuit
-    for i in range(section_number):
-        a=parameters[i]
-        # print(i,a)
-        i_b=str(np.binary_repr(i,width=qubits_num-1))[::-1]
-        for pos,bit in enumerate(i_b):
-            if bit=='0':
-                qml.PauliX(pos)
-        qml.ctrl(qml.RY, wires[0:-1], control_values=[1]*(qubits_num-1))(2*a, wires=qubits_num-1)
-        for pos, bit in enumerate(i_b):
-            if bit == '0':
-                qml.PauliX(pos)
-        qml.Barrier(wires)
-    print("done")
+dev = qml.device("default.qubit", wires=4)
+
+def layer(W):
+
+    qml.Rot(W[0, 0], W[0, 1], W[0, 2], wires=0)
+    qml.Rot(W[1, 0], W[1, 1], W[1, 2], wires=1)
+    qml.Rot(W[2, 0], W[2, 1], W[2, 2], wires=2)
+    qml.Rot(W[3, 0], W[3, 1], W[3, 2], wires=3)
+
+    qml.CNOT(wires=[0, 1])
+    qml.CNOT(wires=[1, 2])
+    qml.CNOT(wires=[2, 3])
+    qml.CNOT(wires=[3, 0])
+
+def statepreparation(x):
+    qml.BasisState(x, wires=[0, 1, 2, 3])
+
+@qml.qnode(dev, interface="autograd")
+def circuit(weights, x):
+
+    statepreparation(x)
+
+    for W in weights:
+        layer(W)
+
     return qml.expval(qml.PauliZ(0))
-if __name__ == '__main__':
-    test=[0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-        0.0000, 0.0000, 0.0000, 1.2358, 1.2312, 0.0000, 0.0000, 0.0000, 0.0000,
-        0.0000, 1.4453, 1.3968, 0.8751, 0.0000, 0.0000, 0.0000, 0.0000, 1.0152,
-        0.4778, 0.0000, 0.0000, 0.8662, 0.0000, 0.0000, 0.0000, 1.2778, 0.0000,
-        0.0000, 0.1586, 0.5267, 0.0000, 0.0000, 0.0000, 0.9471, 0.0000, 0.6884,
-        0.4839, 0.0000, 0.0000, 0.0000, 0.0000, 1.4091, 1.4241, 0.0000, 0.0000,
-        0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
-        0.0000]
-    # for i in range(64):
-    #     test.append(random.random())
-    specs_func = qml.specs(encode_circuit)
-    print(qml.draw(encode_circuit)(7,64,test))
-    print(encode_circuit(7,64,test))
-    print(specs_func(7,64,test))
+
+def variational_classifier(weights, bias, x):
+    result=circuit(weights, x) + bias
+    print("circuit result is ",x)
+    return result
+
+def square_loss(labels, predictions):
+    loss = 0
+    for l, p in zip(labels, predictions):
+        loss = loss + (l - p) ** 2
+
+    loss = loss / len(labels)
+    return loss
+
+def accuracy(labels, predictions):
+
+    loss = 0
+    for l, p in zip(labels, predictions):
+        if abs(l - p) < 1e-5:
+            loss = loss + 1
+    loss = loss / len(labels)
+
+    return loss
+
+def cost(weights, bias, X, Y):
+    predictions = [variational_classifier(weights, bias, x) for x in X]
+    result=square_loss(Y, predictions)
+    # print(result)
+    return result
+
+data = np.loadtxt("data/parity.txt")
+X = np.array(data[:, :-1], requires_grad=False)
+Y = np.array(data[:, -1], requires_grad=False)
+Y = Y * 2 - np.ones(len(Y))  # shift label from {0, 1} to {-1, 1}
+
+for i in range(5):
+    print("X = {}, Y = {: d}".format(X[i], int(Y[i])))
+
+print("...")
+
+np.random.seed(0)
+num_qubits = 4
+num_layers = 2
+weights_init = 0.01 * np.random.randn(num_layers, num_qubits, 3, requires_grad=True)
+bias_init = np.array(0.0, requires_grad=True)
+
+print(weights_init, bias_init)
+
+opt = NesterovMomentumOptimizer(0.5)
+batch_size = 5
+
+weights = weights_init
+bias = bias_init
+for it in range(25):
+
+    # Update the weights by one optimizer step
+    batch_index = np.random.randint(0, len(X), (batch_size,))
+    X_batch = X[batch_index]
+    Y_batch = Y[batch_index]
+    # print("old weights are: ",weights)
+    weights, bias, _, _ = opt.step(cost, weights, bias, X_batch, Y_batch)
+    # print("new weights are: ",weights)
+    # Compute accuracy
+    predictions = [np.sign(variational_classifier(weights, bias, x)) for x in X]
+    acc = accuracy(Y, predictions)
+
+    print(
+        "Iter: {:5d} | Cost: {:0.7f} | Accuracy: {:0.7f} ".format(
+            it + 1, cost(weights, bias, X, Y), acc
+        )
+    )
