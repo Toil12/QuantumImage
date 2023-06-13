@@ -1,4 +1,6 @@
 import time
+
+import autograd.builtins
 from pennylane import numpy as np
 from pennylane.optimize import NesterovMomentumOptimizer
 import matplotlib.pyplot as plt
@@ -56,32 +58,31 @@ def variational_classifier(weights, bias, X,flag=False):
     batch_result=[]
     even_count=0
     odd_count=0
-    if not flag:
-        for x in X:
-            parity_result=circuit(weights,x)
+    for x in X:
+        parity_result = circuit(weights, x)
+        # print(type(parity_result))
+        if type(parity_result)==autograd.builtins.DictBox:
             distribution=parity_result._value
-            even_count+=distribution[1]
-            odd_count+=distribution[-1]
-        # select even_count as the type 1
-            batch_result.append(even_count/(even_count+odd_count))
-        return batch_result+bias
-    else:
-        for x in X:
-            parity_result=circuit(weights,x)
-            # print(parity_result)
+        else:
             distribution=parity_result
-            even_count+=distribution[1]
-            odd_count+=distribution[-1]
-        # select even_count as the type 1
-            batch_result.append(even_count/(even_count+odd_count))#[0.5,0.4,0.4,0.4,0.5]
-        return batch_result+bias
+        even_count+=distribution[1]
+        odd_count+=distribution[-1]
+    # select even_count as the type 1
+        batch_result.append(even_count/(even_count+odd_count))#[0.5,0.4,0.4,0.4,0.5]
+    return batch_result+bias
     # return circuit(weights, x) + bias
 
 def square_loss(labels, predictions):
     # print("labels and predicitons are ", labels, predictions)
     loss = 0
-    p=predictions._value
-    for l, p in zip(labels,p):
+    lab=[]
+    if type(labels)==list:
+        for item in labels:
+            lab+=item.tolist()
+    else:
+        lab=labels
+    # print(lab,predictions)
+    for l, p in zip(lab,predictions):
         # print(l,p)
         loss = loss + (l - p) ** 2
     loss = loss / len(labels)
@@ -89,8 +90,8 @@ def square_loss(labels, predictions):
     return loss
 
 def accuracy(labels, predictions):
-    print(labels)
-    print(predictions)
+    # print(labels)
+    # print(predictions)
     # print("labels and predicitons in acc are ", labels, predictions)
     accuracy_count = 0
     # print(labels,predictions)
@@ -211,26 +212,30 @@ if __name__ == '__main__':
     train_loader, test_loader,image_size=get_images(n_samples=sample_number)
     train_images_q=np.empty([0],dtype=bool)
     train_loader_q=[]
+    loss_record=[]
 
     start_time=time.time()
     # initialize weights and bias
     weights_init = 0.01 * np.random.randn(1, 7, 3, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
-    opt = NesterovMomentumOptimizer(0.1)
+    opt = NesterovMomentumOptimizer(0.001)
     weights = weights_init
     bias = bias_init
     batch_size=5
     #start training
-    for epoch in range(1000):
-        print("starte epoch {}".format(epoch))
+    for epoch in range(100):
+        print("start epoch {}".format(epoch+10))
         predictions=[]
         targets=[]
+        all_images=[]
         count = 0
         for batch_idx, (data, target) in enumerate(train_loader):
             # image=data[0][0]
             targets.append(target)
             # print(target.shape)
             encode_images=image_preprocessing(data)
+            for encode_image in encode_images:
+                all_images.append(encode_image)
             # # print(encode_images.shape)
             # # image_name=str(batch_idx)+"_"+str(count)
             weights, bias, _, _ = opt.step(cost, weights, bias, encode_images, target)
@@ -241,10 +246,12 @@ if __name__ == '__main__':
         # print(len(targets))
         # print(len(predictions))
         acc = accuracy(targets, predictions)
-        # c=cost(weights, bias, encode_image, target)
+        # print("here is cost")
+        c=cost(weights, bias, all_images, targets)
+        loss_record.append(c)
         print(
-            "Epoch: {:d}| Accuracy: {:0.7f} ".format(
-                epoch + 1, acc
+            "Epoch: {:d}| Accuracy: {:0.7f} | Loss: {}".format(
+                epoch + 1, acc,c
             )
         )
         # break
