@@ -6,7 +6,10 @@ import torch
 import pennylane as qml
 import matplotlib.pyplot as plt
 import time
+import logging
 
+logging.basicConfig(level=logging.INFO,
+                    filename=f'./data/loggings/{time.strftime("%d-%H%M%S", time.localtime())}')
 dev = qml.device("lightning.qubit", wires=7,shots=1000)
 
 def encode_circuit(qubits_num, section_number, x):
@@ -185,16 +188,21 @@ if __name__ == '__main__':
     sample_number=50
     batch_size = 10
     learning_rate=0.01
-    epoch_number=10
+    epoch_number=30
+    layer_number = 1
+    logging.info(f"sample number {sample_number}, "
+                 f"batch size {batch_size}, "
+                 f"learning rate {learning_rate}, "
+                 f"epoch number {epoch_number}, "
+                 f"layer number {layer_number}")
     train_loader, test_loader,image_size=get_images(n_samples=sample_number,
                                                     batch_size=batch_size)
-    train_images_q=np.empty([0],dtype=bool)
     train_loader_q=[]
     loss_record=[]
 
     start_time=time.time()
     # initialize weights and bias
-    layer_number=1
+
     weights_init = 0.01 * np.random.randn(layer_number, 7, 3, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
     opt = NesterovMomentumOptimizer(learning_rate)
@@ -203,6 +211,7 @@ if __name__ == '__main__':
     #start training
     for epoch in range(epoch_number):
         print("start epoch {}".format(epoch+1))
+        logging.info(f"start epoch {epoch+1}")
         predictions=[]
         targets=[]
         all_images=[]
@@ -222,6 +231,7 @@ if __name__ == '__main__':
                     iter, acc,c
                 )
             )
+            logging.info(f"Iter: {iter}| Accuracy: {acc} | Loss: {c}")
             iter+=1
             # summary of data in this iteration
             for item in target:
@@ -241,7 +251,7 @@ if __name__ == '__main__':
             # print(predictions)
 
 
-            # break
+            break
         # targets=np.array(targets)
         # all_images=np.array(all_images)
         # predictions=np.array(predictions)
@@ -251,7 +261,8 @@ if __name__ == '__main__':
         # print(all_images)
         # print(predictions)
 
-        epoc_acc = accuracy(targets, predictions)
-        epoc_cost = cost(weights, bias, all_images, targets)
+        epoch_acc = accuracy(targets, predictions)
+        epoch_cost = cost(weights, bias, all_images, targets)
 
-        print("epoch {} : Accuracy {} , Loss {}".format(epoch+1,epoc_acc,epoc_cost))
+        print("epoch {} : Accuracy {} , Loss {}".format(epoch + 1, epoch_acc, epoch_cost))
+        logging.info(f"epoch {epoch+1} : Accuracy {epoch_acc} , Loss {epoch_cost}")

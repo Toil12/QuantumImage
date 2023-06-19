@@ -1,10 +1,16 @@
 from pennylane.optimize import NesterovMomentumOptimizer
 from math import pi
 from torchvision import datasets, transforms
+from net_simpleCNN import Net
+
+import torch.nn as nn
+import torch.nn.functional as F
 import torch
 import matplotlib.pyplot as plt
 import time
 import numpy as np
+
+
 
 def square_loss(labels, predictions):
     # print("labels and predicitons are ", labels, predictions)
@@ -78,8 +84,6 @@ def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
     n_samples_show = 6
     return train_loader,test_loader,rows*cols
 
-
-
 def image_preprocessing(data:np.ndarray,image_size:int=64):
     sequences=[]
     for image in data:
@@ -93,7 +97,6 @@ def image_preprocessing(data:np.ndarray,image_size:int=64):
     sequences=np.array(sequences)
     return sequences
 
-
 if __name__ == '__main__':
     sample_number=50
     batch_size = 10
@@ -101,7 +104,6 @@ if __name__ == '__main__':
     epoch_number=1
     train_loader, test_loader,image_size=get_images(n_samples=sample_number,
                                                     batch_size=batch_size)
-    train_images_q=np.empty([0],dtype=bool)
     train_loader_q=[]
     loss_record=[]
 
