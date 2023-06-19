@@ -188,8 +188,8 @@ if __name__ == '__main__':
     sample_number=50
     batch_size = 10
     learning_rate=0.01
-    epoch_number=30
-    layer_number = 1
+    epoch_number=20
+    layer_number = 2
     logging.info(f"sample number {sample_number}, "
                  f"batch size {batch_size}, "
                  f"learning rate {learning_rate}, "
