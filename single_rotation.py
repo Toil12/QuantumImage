@@ -9,7 +9,7 @@ import torch
 from torchvision import datasets, transforms
 import pennylane as qml
 
-dev = qml.device("default.qubit", wires=7,shots=1000)
+dev = qml.device("lightning.qubit", wires=7,shots=1000)
 
 def encode_circuit(qubits_num, section_number, x):
     # print(qubits_num,section_number,parameters)
@@ -52,24 +52,30 @@ def circuit(weights,x,qubits_n=7,section_n=64):
     for W in weights:
         ansatz_layer(W)
     # result=[qml.counts(qml.PauliZ(i)) for i in range(qubits_n)]
-    return qml.counts(qml.PauliZ(qubits_n-1))
+    return qml.probs(qubits_n-1)
 
-def variational_classifier(weights, bias, X,flag=False):
+def variational_classifier(weights, bias, x,flag=False):
+    # print(x)
     batch_result=[]
     even_count=0
     odd_count=0
-    for x in X:
-        parity_result = circuit(weights, x)
-        # print(type(parity_result))
-        if type(parity_result)==autograd.builtins.DictBox:
-            distribution=parity_result._value
-        else:
-            distribution=parity_result
-        even_count+=distribution[1]
-        odd_count+=distribution[-1]
-    # select even_count as the type 1
-        batch_result.append(even_count/(even_count+odd_count))#[0.5,0.4,0.4,0.4,0.5]
-    return batch_result+bias
+
+
+    parity_result = circuit(weights, x)
+    # print("parity result",parity_result)
+
+    # # print(type(parity_result))
+    # if type(parity_result)==autograd.builtins.DictBox:
+    #     distribution=parity_result._value
+    # else:
+    #     distribution=parity_result
+    # even_count+=distribution[1]
+    # odd_count+=distribution[-1]
+    # # select even_count as the type 1
+    # result=even_count/(even_count+odd_count)#[0.5,0.4,0.4,0.4,0.5]
+    # result=result+bias
+    # print("circuit result is ",result)
+    return parity_result[0]+bias
     # return circuit(weights, x) + bias
 
 def square_loss(labels, predictions):
@@ -97,18 +103,16 @@ def accuracy(labels, predictions):
     # print(labels,predictions)
     for label, prediction in zip(labels, predictions):
         # print(l,p)
-        label=label.tolist()
-        prediction=prediction[0].tolist()
+        # label=label.tolist()
+        # prediction=prediction[0].tolist()
         # print(label,prediction)
-        for l,p in zip(label,prediction):
-            # print("l,p are ",l,p)
-            if abs(l - p) <= 0.5:
-                accuracy_count = accuracy_count + 1
-    accuracy = accuracy_count / (len(labels)*len(labels[0]))
+        if abs(label-prediction) <= 0.5:
+            accuracy_count = accuracy_count + 1
+    accuracy = accuracy_count / len(labels)
     return accuracy
 
 def cost(weights, bias, X, Y):
-    predictions = variational_classifier(weights, bias, X)
+    predictions = [variational_classifier(weights, bias, x) for x in X]
     # print("pre in cost is",predictions)
     return square_loss(Y, predictions)
 
@@ -218,7 +222,7 @@ if __name__ == '__main__':
     # initialize weights and bias
     weights_init = 0.01 * np.random.randn(1, 7, 3, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
-    opt = NesterovMomentumOptimizer(0.001)
+    opt = NesterovMomentumOptimizer(0.1)
     weights = weights_init
     bias = bias_init
     batch_size=5
@@ -230,26 +234,27 @@ if __name__ == '__main__':
         all_images=[]
         count = 0
         for batch_idx, (data, target) in enumerate(train_loader):
-            targets.append(target)
+            # targets.append(target)
             encode_images=image_preprocessing(data)
             for encode_image in encode_images:
                 all_images.append(encode_image)
-            print("old weights are: ",weights)
-            weights, bias, _, _ = opt.step(cost, weights, bias, encode_images, target)
-            print("new weights are: ",weights)
-            # prediction = [variational_classifier(weights, bias, encode_images,flag=True)]
-            # predictions.append(prediction)
 
-            break
+            # print("old weights are ",weights)
+            weights, bias, _, _ = opt.step(cost, weights, bias, encode_images, target)
+            # print("new weights are ", weights)
+            prediction = [variational_classifier(weights, bias, x) for x in encode_images]
+            predictions.append(prediction)
+
+            # break
         # print(prediction)
-        # acc = accuracy(targets, predictions)
-        # c=cost(weights, bias, all_images, targets)
-        # loss_record.append(c)
-        # print(
-        #     "Epoch: {:d}| Accuracy: {:0.7f} | Loss: {}".format(
-        #         epoch + 1, acc,c
-        #     )
-        # )
-        break
+            acc = accuracy(target, prediction)
+            c=cost(weights, bias, encode_images, target)
+            loss_record.append(c)
+            print(
+                "Epoch: {:d}| Accuracy: {:0.7f} | Loss: {}".format(
+                    epoch + 1, acc,c
+                )
+            )
+        # break
 
 

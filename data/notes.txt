@@ -1,0 +1,8 @@
+1.research questions
+2.overview of differnt chapters, rough outlines, table of contents
+
+
+01.06
+1.use angele embedding and smaller size of input,with PCA
+8 qubits in angle encoding,amplitude encoding
+2.further for the loss function

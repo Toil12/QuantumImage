@@ -30,9 +30,8 @@ def circuit(weights, x):
     return qml.expval(qml.PauliZ(0))
 
 def variational_classifier(weights, bias, x):
-    result=circuit(weights, x) + bias
-    print("circuit result is ",x)
-    return result
+    return circuit(weights, x) + bias
+
 
 def square_loss(labels, predictions):
     loss = 0
@@ -46,6 +45,7 @@ def accuracy(labels, predictions):
 
     loss = 0
     for l, p in zip(labels, predictions):
+        print(l,p)
         if abs(l - p) < 1e-5:
             loss = loss + 1
     loss = loss / len(labels)
@@ -54,9 +54,7 @@ def accuracy(labels, predictions):
 
 def cost(weights, bias, X, Y):
     predictions = [variational_classifier(weights, bias, x) for x in X]
-    result=square_loss(Y, predictions)
-    # print(result)
-    return result
+    return square_loss(Y, predictions)
 
 data = np.loadtxt("data/parity.txt")
 X = np.array(data[:, :-1], requires_grad=False)
@@ -87,9 +85,8 @@ for it in range(25):
     batch_index = np.random.randint(0, len(X), (batch_size,))
     X_batch = X[batch_index]
     Y_batch = Y[batch_index]
-    # print("old weights are: ",weights)
     weights, bias, _, _ = opt.step(cost, weights, bias, X_batch, Y_batch)
-    # print("new weights are: ",weights)
+
     # Compute accuracy
     predictions = [np.sign(variational_classifier(weights, bias, x)) for x in X]
     acc = accuracy(Y, predictions)
