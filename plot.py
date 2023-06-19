@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 data=[0.2666410544,
       0.17925388281856,
       0.2778896871652107,
@@ -22,9 +23,18 @@ data=[0.2666410544,
       0.25679944539032773,
       0.24341679522337892,
       0.22171112877672802,
-0.18368154491341687,
-0.20499452328924495
+      0.18368154491341687,
+      0.20499452328924495
 ]
+
+plt.ion()
+figure,ax=plt.subplots()
+lines=ax.plot([],[])
+ax.set_autoscale_on(True)
+ax.grid()
+
+for n in range(len(data)):
+      x=np.arange(len(data))
 y=list(range(len(data)))
 plt.plot(y,data)
 plt.ylabel("loss")

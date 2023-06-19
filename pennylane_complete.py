@@ -1,15 +1,13 @@
-import time
-
-import autograd.builtins
 from pennylane import numpy as np
 from pennylane.optimize import NesterovMomentumOptimizer
-import matplotlib.pyplot as plt
 from math import pi
-import torch
 from torchvision import datasets, transforms
+import torch
 import pennylane as qml
+import matplotlib.pyplot as plt
+import time
 
-dev = qml.device("default.qubit", wires=7,shots=1000)
+dev = qml.device("lightning.qubit", wires=7,shots=1000)
 
 def encode_circuit(qubits_num, section_number, x):
     # print(qubits_num,section_number,parameters)
@@ -52,24 +50,11 @@ def circuit(weights,x,qubits_n=7,section_n=64):
     for W in weights:
         ansatz_layer(W)
     # result=[qml.counts(qml.PauliZ(i)) for i in range(qubits_n)]
-    return qml.counts(qml.PauliZ(qubits_n-1))
+    return qml.probs(qubits_n-1)
 
-def variational_classifier(weights, bias, X,flag=False):
-    batch_result=[]
-    even_count=0
-    odd_count=0
-    for x in X:
-        parity_result = circuit(weights, x)
-        # print(type(parity_result))
-        if type(parity_result)==autograd.builtins.DictBox:
-            distribution=parity_result._value
-        else:
-            distribution=parity_result
-        even_count+=distribution[1]
-        odd_count+=distribution[-1]
-    # select even_count as the type 1
-        batch_result.append(even_count/(even_count+odd_count))#[0.5,0.4,0.4,0.4,0.5]
-    return batch_result+bias
+def variational_classifier(weights, bias, x):
+    parity_result = circuit(weights, x)
+    return parity_result[0]+bias
     # return circuit(weights, x) + bias
 
 def square_loss(labels, predictions):
@@ -78,7 +63,7 @@ def square_loss(labels, predictions):
     lab=[]
     if type(labels)==list:
         for item in labels:
-            lab+=item.tolist()
+            lab.append(item.tolist())
     else:
         lab=labels
     # print(lab,predictions)
@@ -96,19 +81,13 @@ def accuracy(labels, predictions):
     accuracy_count = 0
     # print(labels,predictions)
     for label, prediction in zip(labels, predictions):
-        # print(l,p)
-        label=label.tolist()
-        prediction=prediction[0].tolist()
-        # print(label,prediction)
-        for l,p in zip(label,prediction):
-            # print("l,p are ",l,p)
-            if abs(l - p) <= 0.5:
-                accuracy_count = accuracy_count + 1
-    accuracy = accuracy_count / (len(labels)*len(labels[0]))
+        if abs(label-prediction) <= 0.5:
+            accuracy_count = accuracy_count + 1
+    accuracy = accuracy_count / len(labels)
     return accuracy
 
 def cost(weights, bias, X, Y):
-    predictions = variational_classifier(weights, bias, X)
+    predictions = [variational_classifier(weights, bias, x) for x in X]
     # print("pre in cost is",predictions)
     return square_loss(Y, predictions)
 
@@ -191,12 +170,7 @@ def show_recoverd_image(file_name):
 def image_preprocessing(data:np.ndarray,image_size:int=64):
     sequences=[]
     for image in data:
-        # print(image)
-        # print(image.shape)
-        # fill circuit with angles
-        # print(circ.parameters)
-
-        # set angles ans parameters
+        # sequentialize the image
         image_sequence = image.ravel()
         # pre processing
         for pos in range(len(image_sequence)):
@@ -208,48 +182,76 @@ def image_preprocessing(data:np.ndarray,image_size:int=64):
 
 
 if __name__ == '__main__':
-    sample_number=100
-    train_loader, test_loader,image_size=get_images(n_samples=sample_number)
+    sample_number=50
+    batch_size = 10
+    learning_rate=0.01
+    epoch_number=10
+    train_loader, test_loader,image_size=get_images(n_samples=sample_number,
+                                                    batch_size=batch_size)
     train_images_q=np.empty([0],dtype=bool)
     train_loader_q=[]
     loss_record=[]
 
     start_time=time.time()
     # initialize weights and bias
-    weights_init = 0.01 * np.random.randn(1, 7, 3, requires_grad=True)
+    layer_number=1
+    weights_init = 0.01 * np.random.randn(layer_number, 7, 3, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
-    opt = NesterovMomentumOptimizer(0.001)
+    opt = NesterovMomentumOptimizer(learning_rate)
     weights = weights_init
     bias = bias_init
-    batch_size=5
     #start training
-    for epoch in range(100):
+    for epoch in range(epoch_number):
         print("start epoch {}".format(epoch+1))
         predictions=[]
         targets=[]
         all_images=[]
         count = 0
+        iter=1
         for batch_idx, (data, target) in enumerate(train_loader):
-            targets.append(target)
             encode_images=image_preprocessing(data)
-            for encode_image in encode_images:
-                all_images.append(encode_image)
-            print("old weights are: ",weights)
+            # print("old weights are ",weights)
             weights, bias, _, _ = opt.step(cost, weights, bias, encode_images, target)
-            print("new weights are: ",weights)
-            # prediction = [variational_classifier(weights, bias, encode_images,flag=True)]
-            # predictions.append(prediction)
+            # print("new weights are ", weights)
+            prediction = [variational_classifier(weights, bias, x) for x in encode_images]
+            acc = accuracy(target, prediction)
+            c=cost(weights, bias, encode_images, target)
+            # loss_record.append(c)
+            print(
+                "Iter: {:d}| Accuracy: {:0.7f} | Loss: {}".format(
+                    iter, acc,c
+                )
+            )
+            iter+=1
+            # summary of data in this iteration
+            for item in target:
+                targets.append(item)
+            # print(type(target))
+            # print(type(encode_images))
+            # print(type(prediction))
+            # print(encode_images.shape)
+            # print(encode_images)
+            for item in encode_images:
+                all_images.append(item)
+            for item in prediction:
+                predictions.append(item)
 
-            break
-        # print(prediction)
-        # acc = accuracy(targets, predictions)
-        # c=cost(weights, bias, all_images, targets)
-        # loss_record.append(c)
-        # print(
-        #     "Epoch: {:d}| Accuracy: {:0.7f} | Loss: {}".format(
-        #         epoch + 1, acc,c
-        #     )
-        # )
-        break
+            # print(targets)
+            # print(all_images)
+            # print(predictions)
 
 
+            # break
+        # targets=np.array(targets)
+        # all_images=np.array(all_images)
+        # predictions=np.array(predictions)
+        # print("summary data of this:")
+
+        # print(targets)
+        # print(all_images)
+        # print(predictions)
+
+        epoc_acc = accuracy(targets, predictions)
+        epoc_cost = cost(weights, bias, all_images, targets)
+
+        print("epoch {} : Accuracy {} , Loss {}".format(epoch+1,epoc_acc,epoc_cost))
