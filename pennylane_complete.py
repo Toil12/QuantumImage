@@ -8,8 +8,9 @@ import matplotlib.pyplot as plt
 import time
 import logging
 
+file_name=time.strftime("%d-%H%M%S", time.localtime())
 logging.basicConfig(level=logging.INFO,
-                    filename=f'./data/loggings/{time.strftime("%d-%H%M%S", time.localtime())}')
+                    filename=f'./data/loggings/{file_name}')
 dev = qml.device("lightning.qubit", wires=7,shots=1000)
 
 def encode_circuit(qubits_num, section_number, x):
@@ -183,6 +184,19 @@ def image_preprocessing(data:np.ndarray,image_size:int=64):
     sequences=np.array(sequences)
     return sequences
 
+def image_preprocessing_angle(data:np.ndarray):
+    sequences=[]
+    for image in data:
+        # sequentialize the image
+        image_sequence = image.ravel()
+        # pre processing
+        for pos in range(len(image_sequence)):
+            image_sequence[pos] = image_sequence[pos] * pi / 2
+        # print("complete image is",image_sequence)
+        sequences.append(image_sequence)
+    sequences=np.array(sequences)
+    return sequences
+
 
 if __name__ == '__main__':
     sample_number=50
@@ -190,7 +204,9 @@ if __name__ == '__main__':
     learning_rate=0.01
     epoch_number=20
     layer_number = 2
-    logging.info(f"sample number {sample_number}, "
+    embedding_methods = "FRQI"
+    logging.info(f"embedding methods {embedding_methods}, "
+                 f"sample number {sample_number}, "
                  f"batch size {batch_size}, "
                  f"learning rate {learning_rate}, "
                  f"epoch number {epoch_number}, "
@@ -200,7 +216,7 @@ if __name__ == '__main__':
     train_loader_q=[]
     loss_record=[]
 
-    start_time=time.time()
+
     # initialize weights and bias
 
     weights_init = 0.01 * np.random.randn(layer_number, 7, 3, requires_grad=True)
@@ -210,6 +226,7 @@ if __name__ == '__main__':
     bias = bias_init
     #start training
     for epoch in range(epoch_number):
+        start_time = time.time()
         print("start epoch {}".format(epoch+1))
         logging.info(f"start epoch {epoch+1}")
         predictions=[]
@@ -249,9 +266,6 @@ if __name__ == '__main__':
             # print(targets)
             # print(all_images)
             # print(predictions)
-
-
-            break
         # targets=np.array(targets)
         # all_images=np.array(all_images)
         # predictions=np.array(predictions)
@@ -263,6 +277,13 @@ if __name__ == '__main__':
 
         epoch_acc = accuracy(targets, predictions)
         epoch_cost = cost(weights, bias, all_images, targets)
-
-        print("epoch {} : Accuracy {} , Loss {}".format(epoch + 1, epoch_acc, epoch_cost))
-        logging.info(f"epoch {epoch+1} : Accuracy {epoch_acc} , Loss {epoch_cost}")
+        loss_record.append([epoch_acc, epoch_cost])
+        end_time=time.time()
+        time_cost=(end_time-start_time)/60
+        print("epoch {} : Accuracy {} , Loss {}, Time {}".format(epoch + 1, epoch_acc, epoch_cost, time_cost))
+        logging.info(f"epoch {epoch+1} : "
+                     f"Accuracy {epoch_acc} , "
+                     f"Loss {epoch_cost}, "
+                     f"Time {time_cost} minutes")
+    loss_record = np.array(loss_record)
+    np.save(f"./data/loss_epoch/{file_name}.npy", loss_record)
