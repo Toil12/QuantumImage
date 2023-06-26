@@ -1,0 +1,38 @@
+INFO:root:embedding methods FRQI, sample number 50, batch size 10, learning rate 0.01, epoch number 20, layer number 2
+INFO:root:start epoch 1
+INFO:root:Iter: 1| Accuracy: 0.4 | Loss: 0.249743977856
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.24311134747419363
+INFO:root:Iter: 3| Accuracy: 0.4 | Loss: 0.25255309592956304
+INFO:root:Iter: 4| Accuracy: 0.2 | Loss: 0.2460230837955964
+INFO:root:embedding methods FRQI, sample number 25, batch size 10, learning rate 0.01, epoch number 20, layer number 1
+INFO:root:start epoch 1
+INFO:root:Iter: 1| Accuracy: 0.5 | Loss: 0.259429894916
+INFO:root:Iter: 2| Accuracy: 0.3 | Loss: 0.25192930751895953
+INFO:root:Iter: 3| Accuracy: 0.2 | Loss: 0.2626921174348694
+INFO:root:Iter: 4| Accuracy: 0.4 | Loss: 0.2452240682237629
+INFO:root:Iter: 5| Accuracy: 0.3 | Loss: 0.2545764969517313
+INFO:root:epoch 1 : Training Accuracy 0.34 , Loss 0.2599282162188702, Time 18.10016548236211 minutes, Validation Accuracy 0.43
+INFO:root:start epoch 2
+INFO:root:Iter: 1| Accuracy: 0.4 | Loss: 0.2434610703752742
+INFO:root:Iter: 2| Accuracy: 0.3 | Loss: 0.26223684782685086
+INFO:root:Iter: 3| Accuracy: 0.6 | Loss: 0.2459849110113208
+INFO:root:Iter: 4| Accuracy: 0.6 | Loss: 0.2500957581325317
+INFO:root:Iter: 5| Accuracy: 0.2 | Loss: 0.2594986198726911
+INFO:root:epoch 2 : Training Accuracy 0.42 , Loss 0.2587445736031439, Time 17.253265062967937 minutes, Validation Accuracy 0.45
+INFO:root:start epoch 3
+INFO:root:Iter: 1| Accuracy: 0.5 | Loss: 0.25960618654194023
+INFO:root:Iter: 2| Accuracy: 0.5 | Loss: 0.24355400577873257
+INFO:root:Iter: 3| Accuracy: 0.5 | Loss: 0.24994386077423908
+INFO:root:Iter: 4| Accuracy: 0.3 | Loss: 0.26041024684786523
+INFO:root:Iter: 5| Accuracy: 0.4 | Loss: 0.2739564279464454
+INFO:root:epoch 3 : Training Accuracy 0.44 , Loss 0.25047044948615527, Time 17.12337605158488 minutes, Validation Accuracy 0.51
+INFO:root:start epoch 4
+INFO:root:Iter: 1| Accuracy: 0.5 | Loss: 0.2419465977514384
+INFO:root:Iter: 2| Accuracy: 0.4 | Loss: 0.25388461756646247
+INFO:root:Iter: 3| Accuracy: 0.3 | Loss: 0.25059767026079777
+INFO:root:Iter: 4| Accuracy: 0.4 | Loss: 0.26758132254108224
+INFO:root:Iter: 5| Accuracy: 0.2 | Loss: 0.2512306020472982
+INFO:root:epoch 4 : Training Accuracy 0.36 , Loss 0.2554254701747893, Time 17.216417173544567 minutes, Validation Accuracy 0.52
+INFO:root:start epoch 5
+INFO:root:Iter: 1| Accuracy: 0.5 | Loss: 0.26044045759447576
+INFO:root:Iter: 2| Accuracy: 0.6 | Loss: 0.23740471252555242
