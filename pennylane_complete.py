@@ -257,7 +257,7 @@ if __name__ == '__main__':
                 all_images.append(item)
             for item in prediction:
                 predictions.append(item)
-            break
+            # break
         # validation part
         targets_val=[]
         encode_images_val=[]
@@ -286,7 +286,12 @@ if __name__ == '__main__':
                      f"Time {time_cost} minutes, "
                      f"Validation Accuracy {epoch_acc_val}")
         # print(record_item)
-        with NpyAppendArray(file_name) as npaa:
+        with NpyAppendArray(f"./data/loss_epoch/{file_name}.npy") as npaa:
             npaa.append(record_item)
+        weights_store=np.array(weights).ravel()
+        model=np.append(weights_store,bias)
+        model=np.array([model])
+        with NpyAppendArray(f"./data/model/{file_name}.npy") as npaa:
+            npaa.append(model)
     # record = np.array(record)
     # np.save(f"./data/loss_epoch/{file_name}.npy", loss_record)
