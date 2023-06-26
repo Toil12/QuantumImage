@@ -285,7 +285,7 @@ if __name__ == '__main__':
                      f"Loss {epoch_cost}, "
                      f"Time {time_cost} minutes, "
                      f"Validation Accuracy {epoch_acc_val}")
-        print(record_item)
+        # print(record_item)
         with NpyAppendArray(file_name) as npaa:
             npaa.append(record_item)
     # record = np.array(record)
