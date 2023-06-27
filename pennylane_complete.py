@@ -3,12 +3,13 @@ from pennylane.optimize import NesterovMomentumOptimizer
 from npy_append_array import NpyAppendArray
 from math import pi
 from torchvision import datasets, transforms
-import os
-os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+
 
 import torch
 import pennylane as qml
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
 import time
 import logging
 
