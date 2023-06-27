@@ -15,7 +15,7 @@ import logging
 
 # file_name=time.strftime("%d-%H%M%S", time.localtime())
 
-dev = qml.device("lightning.qubit", wires=7,shots=1000)
+dev = qml.device("default.qubit", wires=7,shots=1000)
 
 def encode_circuit(qubits_num, section_number, x):
     # print(qubits_num,section_number,parameters)
