@@ -5,6 +5,7 @@ from math import pi
 from torchvision import datasets, transforms
 
 
+import argparse
 import torch
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -123,7 +124,9 @@ def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
 # test data
     X_test = datasets.MNIST(root='./data', train=False, download=True,
                             transform=transforms.Compose([transforms.Grayscale(),
-                                                          transforms.ToTensor()]))
+                                                          transforms.ToTensor(),
+                                                          transforms.Resize([rows, cols])
+                                                          ]))
 
     idx = np.append(np.where(X_test.targets == 0)[0][:n_samples],
                     np.where(X_test.targets == 1)[0][:n_samples])
@@ -180,64 +183,24 @@ def image_preprocessing(data:np.ndarray,image_size:int=64):
     sequences=np.array(sequences)
     return sequences
 
-def image_preprocessing_angle(data:np.ndarray):
-    sequences=[]
-    for image in data:
-        # sequentialize the image
-        image_sequence = image.ravel()
-        # pre processing
-        for pos in range(len(image_sequence)):
-            image_sequence[pos] = image_sequence[pos] * pi / 2
-        # print("complete image is",image_sequence)
-        sequences.append(image_sequence)
-    sequences=np.array(sequences)
-    return sequences
+
 
 if __name__ == '__main__':
     # parametes for testing
-    sample_number=50
-    batch_size = 5
-    learning_rate=0.01
-    epoch_number=1
-    layer_number = 1
-    embedding_methods = "FRQI"
+    parser = argparse.ArgumentParser(description='parameters')
+    parser.add_argument('--method', type=str, help='FRQI/angle/amplitude', required=True)
+    parser.add_argument('--sample', type=int, help='number of samples', default=50)
+    parser.add_argument('--lr', type=float, help='learning rate', default=0.01)
+    parser.add_argument('--batch', type=int, help='batch size', default=5)
+    parser.add_argument('--epoch', type=str, help='epoch numbers', default=50)
+    parser.add_argument('--layer', type=int, help='ansatz layer numbers', required=True)
+    args = vars(parser.parse_args())
+    # set hyper parameters
+    embedding_methods = args['method']
+    sample_number = args['sample']
+    batch_size = args['batch']
+    learning_rate = args['lr']
+    epoch_number = args['epoch']
+    layer_number = args['layer']
 
-    time_stamp=time.strftime("%d-%H%M%S", time.localtime())
-    file_name = f"{embedding_methods}_{time_stamp}"
-
-    logging.basicConfig(level=logging.INFO,
-                        filename=f'./data/loggings/{file_name}.log')
-    logging.info(f"embedding methods {embedding_methods}, "
-                 f"sample number {sample_number}, "
-                 f"batch size {batch_size}, "
-                 f"learning rate {learning_rate}, "
-                 f"epoch number {epoch_number}, "
-                 f"layer number {layer_number}")
-    train_loader, test_loader,image_size=get_images(n_samples=sample_number,
-                                                    batch_size=batch_size)
-    train_loader_q=[]
-    record=[]
-    # initialize weights and bias
-    weights_init = 0.01 * np.random.randn(layer_number, 7, 3, requires_grad=True)
-    bias_init = np.array(0.01, requires_grad=True)
-    opt = NesterovMomentumOptimizer(learning_rate)
-    weights = weights_init
-    bias = bias_init
-    #start training
-    for epoch in range(epoch_number):
-        start_time = time.time()
-        print("start epoch {}".format(epoch+1))
-        logging.info(f"start epoch {epoch+1}")
-        predictions=[]
-        targets_train=[]
-        all_images=[]
-        count = 0
-        iter=1
-        targets_val=[]
-        encode_images_val=[]
-        for id_val,(data,target) in enumerate(test_loader):
-            print(data.shape)
-            targets_val=target
-            encode_images_val=image_preprocessing(data)
-        # predictions_val = [variational_classifier(weights, bias, x) for x in encode_images_val]
-        print(encode_images_val.shape)
+    print(embedding_methods, sample_number, batch_size, learning_rate, epoch_number, layer_number)

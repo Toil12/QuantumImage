@@ -5,6 +5,7 @@ from math import pi
 from torchvision import datasets, transforms
 
 
+import argparse
 import torch
 import pennylane as qml
 import matplotlib.pyplot as plt
@@ -182,31 +183,32 @@ def image_preprocessing(data:np.ndarray,image_size:int=64):
     sequences=np.array(sequences)
     return sequences
 
-def image_preprocessing_angle(data:np.ndarray):
-    sequences=[]
-    for image in data:
-        # sequentialize the image
-        image_sequence = image.ravel()
-        # pre processing
-        for pos in range(len(image_sequence)):
-            image_sequence[pos] = image_sequence[pos] * pi / 2
-        # print("complete image is",image_sequence)
-        sequences.append(image_sequence)
-    sequences=np.array(sequences)
-    return sequences
+
 
 if __name__ == '__main__':
     # parametes for testing
-    sample_number=50
-    batch_size = 5
-    learning_rate=0.01
-    epoch_number=1
-    layer_number = 1
-    embedding_methods = "FRQI"
+    parser = argparse.ArgumentParser(description='parameters')
+    parser.add_argument('--method', type=str, help='FRQI/angle/amplitude', required=True)
+    parser.add_argument('--sample', type=int, help='number of samples', default=50)
+    parser.add_argument('--lr', type=float, help='learning rate', default=0.01)
+    parser.add_argument('--batch', type=int, help='batch size', default=5)
+    parser.add_argument('--epoch', type=int, help='epoch numbers', default=50)
+    parser.add_argument('--layer', type=int, help='ansatz layer numbers', required=True)
+    args = vars(parser.parse_args())
+    # set hyper parameters
+    embedding_methods = args['method']
+    sample_number = args['sample']
+    batch_size = args['batch']
+    learning_rate = args['lr']
+    epoch_number = args['epoch']
+    layer_number = args['layer']
 
+    print(embedding_methods, sample_number, batch_size, learning_rate, epoch_number, layer_number)
+
+    # set file name
     time_stamp=time.strftime("%d-%H%M%S", time.localtime())
     file_name = f"{embedding_methods}_{time_stamp}"
-
+    # set logging config
     logging.basicConfig(level=logging.INFO,
                         filename=f'./data/loggings/{file_name}.log')
     logging.info(f"embedding methods {embedding_methods}, "

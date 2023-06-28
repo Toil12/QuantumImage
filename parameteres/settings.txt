@@ -1,0 +1,4 @@
+python .\pennylane_complete.py --method FRQI --sample 50 --lr 0.01 --batch 10 --epoch 50 --layer 2
+
+python .\universal_test.py --method FRQI --sample 50 --lr 0.1 --batch 10 --epoch 50 --layer 3
+
