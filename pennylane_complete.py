@@ -99,7 +99,7 @@ def cost(weights, bias, X, Y):
     # print("pre in cost is",predictions)
     return square_loss(Y, predictions)
 
-def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
+def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
     # Concentrating on the first 100 samples
     n_samples = n_samples
     rows=r
@@ -121,11 +121,11 @@ def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
     train_loader = torch.utils.data.DataLoader(X_train, batch_size=batch_size , shuffle=True)
 
 # test data
-    n_samples = 50
-
     X_test = datasets.MNIST(root='./data', train=False, download=True,
                             transform=transforms.Compose([transforms.Grayscale(),
-                                                          transforms.ToTensor()]))
+                                                          transforms.ToTensor(),
+                                                          transforms.Resize([rows, cols])
+                                                          ]))
 
     idx = np.append(np.where(X_test.targets == 0)[0][:n_samples],
                     np.where(X_test.targets == 1)[0][:n_samples])
@@ -198,10 +198,10 @@ def image_preprocessing_angle(data:np.ndarray):
 if __name__ == '__main__':
     # parametes for testing
     sample_number=50
-    batch_size = 10
+    batch_size = 5
     learning_rate=0.01
-    epoch_number=50
-    layer_number = 2
+    epoch_number=1
+    layer_number = 1
     embedding_methods = "FRQI"
 
     time_stamp=time.strftime("%d-%H%M%S", time.localtime())
