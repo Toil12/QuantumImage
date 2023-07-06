@@ -191,7 +191,7 @@ if __name__ == '__main__':
     time_stamp = time.strftime("%d-%H%M%S", time.localtime())
     file_name = f"{embedding_methods}_{time_stamp}"
     logging.basicConfig(level=logging.INFO,
-                        filename=f'./data/loggings/{file_name}')
+                        filename=f'./data/loggings/{file_name}.log')
     logging.info(f"embedding methods {embedding_methods}, "
                  f"sample number {sample_number}, "
                  f"batch size {batch_size}, "
