@@ -1,5 +1,6 @@
 import time
 import logging
+from npy_append_array import NpyAppendArray
 
 import autograd.builtins
 from sklearn.decomposition import PCA
@@ -11,16 +12,32 @@ import torch
 from torchvision import datasets, transforms
 import pennylane as qml
 
-file_name=time.strftime("%d-%H%M%S", time.localtime())
-logging.basicConfig(level=logging.INFO,
-                    filename=f'./data/loggings/{file_name}')
-dev = qml.device("default.qubit", wires=7,shots=1000)
+QUBITS_NUMBER = 4
 
-def encode_circuit_angle(a,qubits_number:int=4):
+dev = qml.device("default.qubit", wires=QUBITS_NUMBER, shots=1000)
+limits=[[-1.37332022,2.18239306],
+ [-1.40379974,2.14600127],
+ [-1.44892358,1.98171103],
+ [-1.40922388,2.21770789],
+ [-1.55775108,2.41359804],
+ [-1.47722247,2.1297423 ],
+ [-1.32422136,2.28240126],
+ [-1.58264673,2.76999462],
+ [-1.59794053,2.03189994],
+ [-1.38024733,2.1177366 ],
+ [-1.49680734,2.06916022],
+ [-1.4323141 ,2.13822712],
+ [-1.53581841,2.04166024],
+ [-1.3885267 ,2.04384712]]
+
+
+def encode_circuit_angle(a,qubits_number):
     for i in range(qubits_number):
-        qml.RX(a[i],wires=i)
+        # angle=(a[i]-limits[i][0])/(limits[i][1]-limits[i][0])*np.pi
+        angle=np.arctan(a[i])
+        qml.RX(angle,wires=i)
 
-def ansatz_layer(W,qubits_num:int=4):
+def ansatz_layer(W,qubits_num):
     for i in range(qubits_num):
         qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
         if i !=qubits_num-1:
@@ -29,17 +46,17 @@ def ansatz_layer(W,qubits_num:int=4):
             qml.CNOT(wires=[i,0])
 
 @qml.qnode(dev, interface='autograd')
-def circuit(weights, x,qubits_n:int=4):
+def circuit(weights, x,qubits_n):
 
     encode_circuit_angle(a=x,
                          qubits_number=qubits_n)
     for W in weights:
-        ansatz_layer(W)
+        ansatz_layer(W=W,qubits_num=qubits_n)
     # result=[qml.counts(qml.PauliZ(i)) for i in range(qubits_n)]
     return qml.probs(qubits_n-1)
 
-def variational_classifier(weights, bias, x):
-    parity_result = circuit(weights, x)
+def variational_classifier(weights, bias, x,qubits_number):
+    parity_result = circuit(weights, x,qubits_number)
     return parity_result[0] + bias
 
 def accuracy(labels, predictions):
@@ -68,7 +85,7 @@ def square_loss(labels, predictions):
     return loss
 
 def cost(weights, bias, features, labels):
-    predictions = [variational_classifier(weights, bias, f) for f in features]
+    predictions = [variational_classifier(weights, bias, f,QUBITS_NUMBER) for f in features]
     return square_loss(labels, predictions)
 
 def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
@@ -81,6 +98,7 @@ def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
                              transform=transforms.Compose([transforms.Grayscale(),
                                                            transforms.ToTensor(),
                                                            # transforms.Normalize((0.1307,), (0.3081,)),
+                                                           transforms.Resize([rows, cols])
                                                            ]))
 
     # Leaving only labels 0 and 1
@@ -93,11 +111,11 @@ def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
     train_loader = torch.utils.data.DataLoader(X_train, batch_size=batch_size , shuffle=True)
 
 # test data
-    n_samples = 50
-
     X_test = datasets.MNIST(root='./data', train=False, download=True,
                             transform=transforms.Compose([transforms.Grayscale(),
-                                                          transforms.ToTensor()]))
+                                                          transforms.ToTensor(),
+                                                          transforms.Resize([rows, cols])
+                                                          ]))
 
     idx = np.append(np.where(X_test.targets == 0)[0][:n_samples],
                     np.where(X_test.targets == 1)[0][:n_samples])
@@ -105,7 +123,7 @@ def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
     X_test.data = X_test.data[idx]
     X_test.targets = X_test.targets[idx]
 
-    test_loader = torch.utils.data.DataLoader(X_test, batch_size=1, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(X_test, batch_size=n_samples*2, shuffle=True)
     n_samples_show = 6
     return train_loader,test_loader,rows*cols
 
@@ -147,32 +165,33 @@ def show_recoverd_image(file_name):
     print(r)
     recover_image(r)
 
-def image_preprocessing(data:np.ndarray):
+def image_preprocessing_angle(data:np.ndarray):
     sequences=[]
-    for image in data:
-        # print(image)
-        # print(image.shape)
-        # fill circuit with angles
-        # print(circ.parameters)
-
-        # set angles ans parameters
+    for item in data:
+        image=item[0]
         image_sequence = image.ravel()
         # pre processing
-        for pos in range(len(image_sequence)):
-            image_sequence[pos] = image_sequence[pos] * pi / 2
-        # print("complete image is",image_sequence)
         sequences.append(image_sequence)
-    sequences=np.array(sequences)
-    return sequences
+    sequences=np.array(sequences).T
+    torchtensor = torch.as_tensor(sequences.T)
+    pca = PCA(QUBITS_NUMBER)
+    pca.fit(torchtensor)
+    components = pca.transform(torchtensor)
+    return components
 
 
 if __name__ == '__main__':
-    sample_number=50
+    sample_number=100
     batch_size = 10
     learning_rate=0.01
     epoch_number=50
     layer_number = 2
     embedding_methods="angle"
+
+    time_stamp = time.strftime("%d-%H%M%S", time.localtime())
+    file_name = f"{embedding_methods}_{time_stamp}"
+    logging.basicConfig(level=logging.INFO,
+                        filename=f'./data/loggings/{file_name}')
     logging.info(f"embedding methods {embedding_methods}, "
                  f"sample number {sample_number}, "
                  f"batch size {batch_size}, "
@@ -181,13 +200,11 @@ if __name__ == '__main__':
                  f"layer number {layer_number}")
     train_loader, test_loader,image_size=get_images(n_samples=sample_number,
                                                     batch_size=batch_size)
-    train_loader_q=[]
-    loss_record=[]
 
     start_time=time.time()
     # initialize weights and bias
 
-    weights_init = 0.01 * np.random.randn(layer_number, 7, 3, requires_grad=True)
+    weights_init = 0.01 * np.random.randn(layer_number, QUBITS_NUMBER, 3, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
     opt = NesterovMomentumOptimizer(learning_rate)
     weights = weights_init
@@ -203,23 +220,26 @@ if __name__ == '__main__':
         count = 0
         iter=1
         for batch_idx, (data, target) in enumerate(train_loader):
-            fig=plt.figure(figsize=(1,batch_size))
-            images=[]
-            for n in range(0,batch_size):
-                # fig.add_subplot(1, batch_size, n + 1)
-                image=data[n][0]
-                # plt.imshow(image, cmap='gray')
-                image=image.ravel()
-                images.append(image)
-            # plt.show()
-            images=np.array(images).T
-            torchtensor = torch.as_tensor(images.T)
-            # 8*8
-            pca=PCA(n_components=0.99)
-            pca.fit(torchtensor)
-            components=pca.transform(torchtensor)
-            recovered=pca.inverse_transform(components)
+            # fig=plt.figure(figsize=(1,batch_size))
+            # images=[]
+            # print(data.shape)
+            # for n in range(0,batch_size):
+            #     # fig.add_subplot(1, batch_size, n + 1)
+            #     image=data[n][0]
+            #     # plt.imshow(image, cmap='gray')
+            #     image=image.ravel()
+            #     images.append(image)
+            # # plt.show()
+            # images=np.array(images).T
+            # torchtensor = torch.as_tensor(images.T)
+            # # 8*8
+            # pca=PCA(QUBITS_NUMBER)
+            # pca.fit(torchtensor)
+            # components=pca.transform(torchtensor)
+            # print(components.shape)
+            # recovered=pca.inverse_transform(components)
             # print(recovered.shape)
+            # show images after pre processing
             # fig2 = plt.figure(figsize=(1, batch_size))
             # for n in range(5):
             #     # original image size 28*28
@@ -227,10 +247,10 @@ if __name__ == '__main__':
             #     fig2.add_subplot(1, batch_size, n + 1)
             #     plt.imshow(recover, cmap='gray')
             # plt.show()
-            encode_images = components
+            encode_images = image_preprocessing_angle(data)
             weights, bias, _, _ = opt.step(cost, weights, bias, encode_images, target)
 
-            prediction = [variational_classifier(weights, bias, x) for x in encode_images]
+            prediction = [variational_classifier(weights, bias, x,QUBITS_NUMBER) for x in encode_images]
             acc = accuracy(target, prediction)
             c = cost(weights, bias, encode_images, target)
             print(
@@ -246,15 +266,36 @@ if __name__ == '__main__':
                 all_images.append(item)
             for item in prediction:
                 predictions.append(item)
+        # validation part
+        targets_val = []
+        encode_images_val = []
+        for id_val, (data, target) in enumerate(test_loader):
+            targets_val = target
+            encode_images_val = image_preprocessing_angle(data)
+        predictions_val = [variational_classifier(weights, bias, x, QUBITS_NUMBER) for x in encode_images_val]
+
         epoch_acc = accuracy(targets, predictions)
         epoch_cost = cost(weights, bias, all_images, targets)
-        loss_record.append([epoch_acc,epoch_cost])
+        epoch_acc_val = accuracy(targets_val, predictions_val)
+
+        record_item=np.array([[epoch_acc,epoch_cost,epoch_acc_val]])
         end_time = time.time()
         time_cost = (end_time - start_time) / 60
-        print("epoch {} : Accuracy {} , Loss {}, Time {}".format(epoch + 1, epoch_acc, epoch_cost,time_cost))
+        print("epoch {} : "
+              "Accuracy {} , "
+              "Loss {}, "
+              "Time {}, "
+              "Val Accuracy {}".format(epoch + 1, epoch_acc, epoch_cost, time_cost, epoch_acc_val))
         logging.info(f"epoch {epoch + 1} : "
-                     f"Accuracy {epoch_acc} , "
+                     f"Training Accuracy {epoch_acc} , "
                      f"Loss {epoch_cost}, "
-                     f"Time {time_cost} minutes")
-    loss_record=np.array(loss_record)
-    np.save(f"./data/loss_epoch/{file_name}.npy",loss_record)
+                     f"Time {time_cost} minutes, "
+                     f"Validation Accuracy {epoch_acc_val}")
+        # print(record_item)
+        with NpyAppendArray(f"./data/loss_epoch/{file_name}_loss.npy") as npaa:
+            npaa.append(record_item)
+        weights_store = np.array(weights).ravel()
+        model = np.append(weights_store, bias)
+        model = np.array([model])
+        with NpyAppendArray(f"./data/model/{file_name}_model.npy") as npaa:
+            npaa.append(model)

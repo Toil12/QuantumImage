@@ -6,3 +6,7 @@
 1.use angele embedding and smaller size of input,with PCA
 8 qubits in angle encoding,amplitude encoding
 2.further for the loss function
+
+30.06
+1. fix problems from 4 experiments with current data setting
+2. Contents table based on the template, experiments designs

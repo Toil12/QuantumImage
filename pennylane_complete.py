@@ -1,17 +1,22 @@
 from pennylane import numpy as np
 from pennylane.optimize import NesterovMomentumOptimizer
+from npy_append_array import NpyAppendArray
 from math import pi
 from torchvision import datasets, transforms
+
+
+import argparse
 import torch
 import pennylane as qml
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')
 import time
 import logging
 
-file_name=time.strftime("%d-%H%M%S", time.localtime())
-logging.basicConfig(level=logging.INFO,
-                    filename=f'./data/loggings/{file_name}')
-dev = qml.device("lightning.qubit", wires=7,shots=1000)
+# file_name=time.strftime("%d-%H%M%S", time.localtime())
+
+dev_7 = qml.device("default.qubit", wires=7, shots=1000)
 
 def encode_circuit(qubits_num, section_number, x):
     # print(qubits_num,section_number,parameters)
@@ -44,7 +49,7 @@ def ansatz_layer(W,qubits_num:int=7):
         else:
             qml.CNOT(wires=[i,0])
 
-@qml.qnode(dev, interface='autograd')
+@qml.qnode(dev_7, interface='autograd')
 def circuit(weights,x,qubits_n=7,section_n=64):
     # print("get w as ",weights)
     # print("input image in circuit is",x)
@@ -95,7 +100,7 @@ def cost(weights, bias, X, Y):
     # print("pre in cost is",predictions)
     return square_loss(Y, predictions)
 
-def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
+def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
     # Concentrating on the first 100 samples
     n_samples = n_samples
     rows=r
@@ -105,7 +110,8 @@ def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
                              transform=transforms.Compose([transforms.Grayscale(),
                                                            transforms.ToTensor(),
                                                            # transforms.Normalize((0.1307,), (0.3081,)),
-                                                           transforms.Resize([rows, cols])]))
+                                                           transforms.Resize([rows, cols])
+                                                           ]))
 
     # Leaving only labels 0 and 1
     idx = np.append(np.where(X_train.targets == 0)[0][:n_samples],
@@ -117,11 +123,11 @@ def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
     train_loader = torch.utils.data.DataLoader(X_train, batch_size=batch_size , shuffle=True)
 
 # test data
-    n_samples = 50
-
     X_test = datasets.MNIST(root='./data', train=False, download=True,
                             transform=transforms.Compose([transforms.Grayscale(),
-                                                          transforms.ToTensor()]))
+                                                          transforms.ToTensor(),
+                                                          transforms.Resize([rows, cols])
+                                                          ]))
 
     idx = np.append(np.where(X_test.targets == 0)[0][:n_samples],
                     np.where(X_test.targets == 1)[0][:n_samples])
@@ -129,19 +135,14 @@ def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
     X_test.data = X_test.data[idx]
     X_test.targets = X_test.targets[idx]
 
-    test_loader = torch.utils.data.DataLoader(X_test, batch_size=1, shuffle=True)
-    n_samples_show = 6
+    test_loader = torch.utils.data.DataLoader(X_test, batch_size=n_samples*2, shuffle=True)
     return train_loader,test_loader,rows*cols
-
-def parameter_name(id):
-    return "piexls_{}".format(str(id))
 
 def recover_image(quantam_encode:list,show=True):
     image = quantam_encode
     recover_dict = {}
     for i in range(2 ** 6):
         recover_dict[i] = [0, 0]
-
     piexls_counts = 0
     for item in image.items():
         print(item)
@@ -152,7 +153,6 @@ def recover_image(quantam_encode:list,show=True):
         piexls_counts += 1
         # print(pos,color)
         recover_dict[pos][color] += count
-
     image = np.zeros([8, 8])
     for key, val in recover_dict.items():
         raw = key // 8
@@ -184,27 +184,34 @@ def image_preprocessing(data:np.ndarray,image_size:int=64):
     sequences=np.array(sequences)
     return sequences
 
-def image_preprocessing_angle(data:np.ndarray):
-    sequences=[]
-    for image in data:
-        # sequentialize the image
-        image_sequence = image.ravel()
-        # pre processing
-        for pos in range(len(image_sequence)):
-            image_sequence[pos] = image_sequence[pos] * pi / 2
-        # print("complete image is",image_sequence)
-        sequences.append(image_sequence)
-    sequences=np.array(sequences)
-    return sequences
 
 
 if __name__ == '__main__':
-    sample_number=50
-    batch_size = 10
-    learning_rate=0.01
-    epoch_number=20
-    layer_number = 2
-    embedding_methods = "FRQI"
+    # parametes for testing
+    parser = argparse.ArgumentParser(description='parameters')
+    parser.add_argument('--method', type=str, help='FRQI/angle/amplitude', default="FRQI")
+    parser.add_argument('--sample', type=int, help='number of samples', default=50)
+    parser.add_argument('--lr', type=float, help='learning rate', default=0.01)
+    parser.add_argument('--batch', type=int, help='batch size', default=5)
+    parser.add_argument('--epoch', type=int, help='epoch numbers', default=50)
+    parser.add_argument('--layer', type=int, help='ansatz layer numbers', default=1)
+    args = vars(parser.parse_args())
+    # set hyper parameters
+    embedding_methods = args['method']
+    sample_number = args['sample']
+    batch_size = args['batch']
+    learning_rate = args['lr']
+    epoch_number = args['epoch']
+    layer_number = args['layer']
+
+    print(embedding_methods, sample_number, batch_size, learning_rate, epoch_number, layer_number)
+
+    # set file name
+    time_stamp=time.strftime("%d-%H%M%S", time.localtime())
+    file_name = f"{embedding_methods}_{time_stamp}"
+    # set logging config
+    logging.basicConfig(level=logging.INFO,
+                        filename=f'./data/loggings/{file_name}.log')
     logging.info(f"embedding methods {embedding_methods}, "
                  f"sample number {sample_number}, "
                  f"batch size {batch_size}, "
@@ -213,12 +220,7 @@ if __name__ == '__main__':
                  f"layer number {layer_number}")
     train_loader, test_loader,image_size=get_images(n_samples=sample_number,
                                                     batch_size=batch_size)
-    train_loader_q=[]
-    loss_record=[]
-
-
     # initialize weights and bias
-
     weights_init = 0.01 * np.random.randn(layer_number, 7, 3, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
     opt = NesterovMomentumOptimizer(learning_rate)
@@ -230,18 +232,17 @@ if __name__ == '__main__':
         print("start epoch {}".format(epoch+1))
         logging.info(f"start epoch {epoch+1}")
         predictions=[]
-        targets=[]
+        targets_train=[]
         all_images=[]
-        count = 0
         iter=1
         for batch_idx, (data, target) in enumerate(train_loader):
-            encode_images=image_preprocessing(data)
+            encode_images_train=image_preprocessing(data)
             # print("old weights are ",weights)
-            weights, bias, _, _ = opt.step(cost, weights, bias, encode_images, target)
+            weights, bias, _, _ = opt.step(cost, weights, bias, encode_images_train, target)
             # print("new weights are ", weights)
-            prediction = [variational_classifier(weights, bias, x) for x in encode_images]
+            prediction = [variational_classifier(weights, bias, x) for x in encode_images_train]
             acc = accuracy(target, prediction)
-            c=cost(weights, bias, encode_images, target)
+            c=cost(weights, bias, encode_images_train, target)
             # loss_record.append(c)
             print(
                 "Iter: {:d}| Accuracy: {:0.7f} | Loss: {}".format(
@@ -252,38 +253,46 @@ if __name__ == '__main__':
             iter+=1
             # summary of data in this iteration
             for item in target:
-                targets.append(item)
-            # print(type(target))
-            # print(type(encode_images))
-            # print(type(prediction))
-            # print(encode_images.shape)
-            # print(encode_images)
-            for item in encode_images:
+                targets_train.append(item)
+            for item in encode_images_train:
                 all_images.append(item)
             for item in prediction:
                 predictions.append(item)
+            # break
+        # validation part
+        targets_val=[]
+        encode_images_val=[]
+        for id_val,(data,target) in enumerate(test_loader):
+            targets_val=target
+            encode_images_val=image_preprocessing(data)
+        predictions_val = [variational_classifier(weights, bias, x) for x in encode_images_val]
 
-            # print(targets)
-            # print(all_images)
-            # print(predictions)
-        # targets=np.array(targets)
-        # all_images=np.array(all_images)
-        # predictions=np.array(predictions)
-        # print("summary data of this:")
 
-        # print(targets)
-        # print(all_images)
-        # print(predictions)
+        epoch_acc = accuracy(targets_train, predictions)
+        epoch_cost = cost(weights, bias, all_images, targets_train)
+        epoch_acc_val = accuracy(targets_val, predictions_val)
 
-        epoch_acc = accuracy(targets, predictions)
-        epoch_cost = cost(weights, bias, all_images, targets)
-        loss_record.append([epoch_acc, epoch_cost])
+        record_item=np.array([[epoch_acc,epoch_cost,epoch_acc_val]])
+        # record.append([epoch_acc, epoch_cost,epoch_acc_val])
         end_time=time.time()
         time_cost=(end_time-start_time)/60
-        print("epoch {} : Accuracy {} , Loss {}, Time {}".format(epoch + 1, epoch_acc, epoch_cost, time_cost))
+        print("epoch {} : "
+              "Accuracy {} , "
+              "Loss {}, "
+              "Time {}, "
+              "Val Accuracy {}".format(epoch + 1, epoch_acc, epoch_cost, time_cost,epoch_acc_val))
         logging.info(f"epoch {epoch+1} : "
-                     f"Accuracy {epoch_acc} , "
+                     f"Training Accuracy {epoch_acc} , "
                      f"Loss {epoch_cost}, "
-                     f"Time {time_cost} minutes")
-    loss_record = np.array(loss_record)
-    np.save(f"./data/loss_epoch/{file_name}.npy", loss_record)
+                     f"Time {time_cost} minutes, "
+                     f"Validation Accuracy {epoch_acc_val}")
+        # print(record_item)
+        with NpyAppendArray(f"./data/loss_epoch/{file_name}_loss.npy") as npaa:
+            npaa.append(record_item)
+        weights_store=np.array(weights).ravel()
+        model=np.append(weights_store,bias)
+        model=np.array([model])
+        with NpyAppendArray(f"./data/model/{file_name}_model.npy") as npaa:
+            npaa.append(model)
+    # record = np.array(record)
+    # np.save(f"./data/loss_epoch/{file_name}.npy", loss_record)
