@@ -85,7 +85,7 @@ def square_loss(labels, predictions):
     return loss
 
 def cost(weights, bias, features, labels):
-    predictions = [variational_classifier(weights, bias, f,QUBITS_NUMBER) for f in features]
+    predictions = [variational_classifier(weights, bias, f, QUBITS_NUMBER) for f in features]
     return square_loss(labels, predictions)
 
 def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
@@ -220,37 +220,10 @@ if __name__ == '__main__':
         count = 0
         iter=1
         for batch_idx, (data, target) in enumerate(train_loader):
-            # fig=plt.figure(figsize=(1,batch_size))
-            # images=[]
-            # print(data.shape)
-            # for n in range(0,batch_size):
-            #     # fig.add_subplot(1, batch_size, n + 1)
-            #     image=data[n][0]
-            #     # plt.imshow(image, cmap='gray')
-            #     image=image.ravel()
-            #     images.append(image)
-            # # plt.show()
-            # images=np.array(images).T
-            # torchtensor = torch.as_tensor(images.T)
-            # # 8*8
-            # pca=PCA(QUBITS_NUMBER)
-            # pca.fit(torchtensor)
-            # components=pca.transform(torchtensor)
-            # print(components.shape)
-            # recovered=pca.inverse_transform(components)
-            # print(recovered.shape)
-            # show images after pre processing
-            # fig2 = plt.figure(figsize=(1, batch_size))
-            # for n in range(5):
-            #     # original image size 28*28
-            #     recover=torch.reshape(torch.as_tensor(recovered[n]),(28,28))
-            #     fig2.add_subplot(1, batch_size, n + 1)
-            #     plt.imshow(recover, cmap='gray')
-            # plt.show()
             encode_images = image_preprocessing_angle(data)
             weights, bias, _, _ = opt.step(cost, weights, bias, encode_images, target)
 
-            prediction = [variational_classifier(weights, bias, x,QUBITS_NUMBER) for x in encode_images]
+            prediction = [variational_classifier(weights, bias, x, QUBITS_NUMBER) for x in encode_images]
             acc = accuracy(target, prediction)
             c = cost(weights, bias, encode_images, target)
             print(
