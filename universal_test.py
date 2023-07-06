@@ -1,47 +1,26 @@
-from pennylane import numpy as np
-from pennylane.optimize import NesterovMomentumOptimizer
-from npy_append_array import NpyAppendArray
-from math import pi
-from torchvision import datasets, transforms
-
-
-import argparse
-import torch
-import pennylane as qml
-import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.use('Agg')
 import time
 import logging
 
-# file_name=time.strftime("%d-%H%M%S", time.localtime())
+import autograd.builtins
+from sklearn.decomposition import PCA
+from pennylane import numpy as np
+from pennylane.optimize import NesterovMomentumOptimizer
+import matplotlib.pyplot as plt
+from math import pi
+import torch
+from torchvision import datasets, transforms
+import pennylane as qml
 
+file_name=time.strftime("%d-%H%M%S", time.localtime())
+logging.basicConfig(level=logging.INFO,
+                    filename=f'./data/loggings/{file_name}')
 dev = qml.device("default.qubit", wires=7,shots=1000)
 
-def encode_circuit(qubits_num, section_number, x):
-    # print(qubits_num,section_number,parameters)
-    wires=[w for w in range(qubits_num)]
-    # set H gates
-    for wire in wires[0:-1]:
-        qml.Hadamard(wire)
-    # for each pixel set circuit
-    for i in range(section_number):
-        # print("here is inside the circuit",i,x[i])
-        a=x[i]
-        # print(i,a)
-        i_b=str(np.binary_repr(i,width=qubits_num-1))[::-1]
-        for pos,bit in enumerate(i_b):
-            if bit=='0':
-                qml.PauliX(pos)
-        qml.ctrl(qml.RY, wires[0:-1], control_values=[1]*(qubits_num-1))(2*a, wires=qubits_num-1)
-        for pos, bit in enumerate(i_b):
-            if bit == '0':
-                qml.PauliX(pos)
-        qml.Barrier(wires)
-    # print("encode done")
+def encode_circuit_angle(a,qubits_number:int=4):
+    for i in range(qubits_number):
+        qml.RX(a[i],wires=i)
 
-def ansatz_layer(W,qubits_num:int=7):
-    # print("weights inside the circuit",W)
+def ansatz_layer(W,qubits_num:int=4):
     for i in range(qubits_num):
         qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
         if i !=qubits_num-1:
@@ -50,12 +29,10 @@ def ansatz_layer(W,qubits_num:int=7):
             qml.CNOT(wires=[i,0])
 
 @qml.qnode(dev, interface='autograd')
-def circuit(weights,x,qubits_n=7,section_n=64):
-    # print("get w as ",weights)
-    # print("input image in circuit is",x)
-    encode_circuit(qubits_num=qubits_n,
-                   section_number=section_n,
-                   x=x)
+def circuit(weights, x,qubits_n:int=4):
+
+    encode_circuit_angle(a=x,
+                         qubits_number=qubits_n)
     for W in weights:
         ansatz_layer(W)
     # result=[qml.counts(qml.PauliZ(i)) for i in range(qubits_n)]
@@ -63,11 +40,19 @@ def circuit(weights,x,qubits_n=7,section_n=64):
 
 def variational_classifier(weights, bias, x):
     parity_result = circuit(weights, x)
-    return parity_result[0]+bias
-    # return circuit(weights, x) + bias
+    return parity_result[0] + bias
+
+def accuracy(labels, predictions):
+
+    accuracy_count = 0
+    # print(labels,predictions)
+    for label, prediction in zip(labels, predictions):
+        if abs(label-prediction) <= 0.5:
+            accuracy_count = accuracy_count + 1
+    accuracy = accuracy_count / len(labels)
+    return accuracy
 
 def square_loss(labels, predictions):
-    # print("labels and predicitons are ", labels, predictions)
     loss = 0
     lab=[]
     if type(labels)==list:
@@ -80,27 +65,13 @@ def square_loss(labels, predictions):
         # print(l,p)
         loss = loss + (l - p) ** 2
     loss = loss / len(labels)
-    # print(loss)
     return loss
 
-def accuracy(labels, predictions):
-    # print(labels)
-    # print(predictions)
-    # print("labels and predicitons in acc are ", labels, predictions)
-    accuracy_count = 0
-    # print(labels,predictions)
-    for label, prediction in zip(labels, predictions):
-        if abs(label-prediction) <= 0.5:
-            accuracy_count = accuracy_count + 1
-    accuracy = accuracy_count / len(labels)
-    return accuracy
+def cost(weights, bias, features, labels):
+    predictions = [variational_classifier(weights, bias, f) for f in features]
+    return square_loss(labels, predictions)
 
-def cost(weights, bias, X, Y):
-    predictions = [variational_classifier(weights, bias, x) for x in X]
-    # print("pre in cost is",predictions)
-    return square_loss(Y, predictions)
-
-def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
+def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
     # Concentrating on the first 100 samples
     n_samples = n_samples
     rows=r
@@ -109,8 +80,9 @@ def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
     X_train = datasets.MNIST(root='./data', train=True, download=True,
                              transform=transforms.Compose([transforms.Grayscale(),
                                                            transforms.ToTensor(),
+                                                           transforms.Resize([rows, cols])
                                                            # transforms.Normalize((0.1307,), (0.3081,)),
-                                                           transforms.Resize([rows, cols])]))
+                                                           ]))
 
     # Leaving only labels 0 and 1
     idx = np.append(np.where(X_train.targets == 0)[0][:n_samples],
@@ -135,13 +107,18 @@ def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
     X_test.targets = X_test.targets[idx]
 
     test_loader = torch.utils.data.DataLoader(X_test, batch_size=n_samples*2, shuffle=True)
+    n_samples_show = 6
     return train_loader,test_loader,rows*cols
+
+def parameter_name(id):
+    return "piexls_{}".format(str(id))
 
 def recover_image(quantam_encode:list,show=True):
     image = quantam_encode
     recover_dict = {}
     for i in range(2 ** 6):
         recover_dict[i] = [0, 0]
+
     piexls_counts = 0
     for item in image.items():
         print(item)
@@ -152,6 +129,7 @@ def recover_image(quantam_encode:list,show=True):
         piexls_counts += 1
         # print(pos,color)
         recover_dict[pos][color] += count
+
     image = np.zeros([8, 8])
     for key, val in recover_dict.items():
         raw = key // 8
@@ -170,10 +148,14 @@ def show_recoverd_image(file_name):
     print(r)
     recover_image(r)
 
-def image_preprocessing(data:np.ndarray,image_size:int=64):
+def image_preprocessing(data:np.ndarray):
     sequences=[]
     for image in data:
-        # sequentialize the image
+        # print(image)
+        # print(image.shape)
+        # fill circuit with angles
+        # print(circ.parameters)
+        # set angles ans parameters
         image_sequence = image.ravel()
         # pre processing
         for pos in range(len(image_sequence)):
@@ -184,23 +166,62 @@ def image_preprocessing(data:np.ndarray,image_size:int=64):
     return sequences
 
 
-
 if __name__ == '__main__':
-    # parametes for testing
-    parser = argparse.ArgumentParser(description='parameters')
-    parser.add_argument('--method', type=str, help='FRQI/angle/amplitude', required=True)
-    parser.add_argument('--sample', type=int, help='number of samples', default=50)
-    parser.add_argument('--lr', type=float, help='learning rate', default=0.01)
-    parser.add_argument('--batch', type=int, help='batch size', default=5)
-    parser.add_argument('--epoch', type=str, help='epoch numbers', default=50)
-    parser.add_argument('--layer', type=int, help='ansatz layer numbers', required=True)
-    args = vars(parser.parse_args())
-    # set hyper parameters
-    embedding_methods = args['method']
-    sample_number = args['sample']
-    batch_size = args['batch']
-    learning_rate = args['lr']
-    epoch_number = args['epoch']
-    layer_number = args['layer']
+    sample_number=10000
+    batch_size = 100
+    learning_rate=0.01
+    epoch_number=2
+    layer_number = 2
+    embedding_methods="angle"
+    logging.info(f"embedding methods {embedding_methods}, "
+                 f"sample number {sample_number}, "
+                 f"batch size {batch_size}, "
+                 f"learning rate {learning_rate}, "
+                 f"epoch number {epoch_number}, "
+                 f"layer number {layer_number}")
+    train_loader, test_loader,image_size=get_images(n_samples=sample_number,
+                                                    batch_size=batch_size)
+    train_loader_q=[]
+    loss_record=[]
 
-    print(embedding_methods, sample_number, batch_size, learning_rate, epoch_number, layer_number)
+    start_time=time.time()
+    # initialize weights and bias
+
+    weights_init = 0.01 * np.random.randn(layer_number, 7, 3, requires_grad=True)
+    bias_init = np.array(0.01, requires_grad=True)
+    opt = NesterovMomentumOptimizer(learning_rate)
+    weights = weights_init
+    bias = bias_init
+
+    store=np.zeros([16,2])
+
+    for epoch in range(epoch_number):
+        start_time = time.time()
+        print("start epoch {}".format(epoch+1))
+        logging.info(f"start epoch {epoch + 1}")
+        predictions=[]
+        targets=[]
+        all_images=[]
+        count = 0
+        iter=1
+
+        for batch_idx, (data, target) in enumerate(train_loader):
+            # print(data.shape)
+            images=[]
+            for n in range(0, len(data)):
+                image=data[n][0]
+                image=image.ravel()
+                images.append(image)
+            images=np.array(images).T
+            torchtensor = torch.as_tensor(images.T)
+            # print(torchtensor.shape)
+            # 8
+            pca=PCA(n_components=4)
+            pca.fit(torchtensor)
+            print(sum(pca.explained_variance_ratio_))
+            # components=pca.transform(torchtensor)
+
+        #     for i in range(components.shape[1]):
+        #         store[i][0]=min(min(components[:][i]),store[i][0])
+        #         store[i][1]=max(max(components[:][i]),store[i][1])
+        # print(store)

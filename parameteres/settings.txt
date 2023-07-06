@@ -2,3 +2,31 @@ python .\pennylane_complete.py --method FRQI --sample 50 --lr 0.01 --batch 10 --
 
 python .\universal_test.py --method FRQI --sample 50 --lr 0.1 --batch 10 --epoch 50 --layer 3
 
+#######################################
+ps -aux | grep python
+
+pgrep -u liy
+
+nohup python3 DQN.py > myOutput.txt
+
+cd ~/QuamtumThesis/SystemTest
+
+--model q --config train_lightning --encode dense_a
+
+########################################
+Dense angle encoding:
+nohup python3 -u DQN.py --model q --config train_lightning --encode dense_a > ~/QuamtumThesis/Results/Traceback/dense_a.txt &
+
+Simple angle encoding
+nohup python3 -u DQN.py --model q --config train_lightning --encode normal_a > ~/QuamtumThesis/Results/Traceback/normal_a.txt &
+
+CNN extraction
+nohup python3 -u DQN.py --model c --config train_lightning --encode normal_a > ~/QuamtumThesis/Results/Traceback/classical.txt &
+
+with 3 layers
+nohup python3 -u DQN.py --model q --config train_n_3 --encode dense_a > ~/QuamtumThesis/Results/Traceback/dense_a_layer3.txt &
+
+with 5 layers
+nohup python3 -u DQN.py --model q --config train_n_5 --encode dense_a > ~/QuamtumThesis/Results/Traceback/dense_a_layer5.txt &
+
+

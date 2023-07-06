@@ -16,7 +16,7 @@ import logging
 
 # file_name=time.strftime("%d-%H%M%S", time.localtime())
 
-dev = qml.device("default.qubit", wires=7,shots=1000)
+dev_7 = qml.device("default.qubit", wires=7, shots=1000)
 
 def encode_circuit(qubits_num, section_number, x):
     # print(qubits_num,section_number,parameters)
@@ -49,7 +49,7 @@ def ansatz_layer(W,qubits_num:int=7):
         else:
             qml.CNOT(wires=[i,0])
 
-@qml.qnode(dev, interface='autograd')
+@qml.qnode(dev_7, interface='autograd')
 def circuit(weights,x,qubits_n=7,section_n=64):
     # print("get w as ",weights)
     # print("input image in circuit is",x)
@@ -110,7 +110,8 @@ def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
                              transform=transforms.Compose([transforms.Grayscale(),
                                                            transforms.ToTensor(),
                                                            # transforms.Normalize((0.1307,), (0.3081,)),
-                                                           transforms.Resize([rows, cols])]))
+                                                           transforms.Resize([rows, cols])
+                                                           ]))
 
     # Leaving only labels 0 and 1
     idx = np.append(np.where(X_train.targets == 0)[0][:n_samples],
@@ -188,12 +189,12 @@ def image_preprocessing(data:np.ndarray,image_size:int=64):
 if __name__ == '__main__':
     # parametes for testing
     parser = argparse.ArgumentParser(description='parameters')
-    parser.add_argument('--method', type=str, help='FRQI/angle/amplitude', required=True)
+    parser.add_argument('--method', type=str, help='FRQI/angle/amplitude', default="FRQI")
     parser.add_argument('--sample', type=int, help='number of samples', default=50)
     parser.add_argument('--lr', type=float, help='learning rate', default=0.01)
     parser.add_argument('--batch', type=int, help='batch size', default=5)
     parser.add_argument('--epoch', type=int, help='epoch numbers', default=50)
-    parser.add_argument('--layer', type=int, help='ansatz layer numbers', required=True)
+    parser.add_argument('--layer', type=int, help='ansatz layer numbers', default=1)
     args = vars(parser.parse_args())
     # set hyper parameters
     embedding_methods = args['method']
@@ -219,8 +220,6 @@ if __name__ == '__main__':
                  f"layer number {layer_number}")
     train_loader, test_loader,image_size=get_images(n_samples=sample_number,
                                                     batch_size=batch_size)
-    train_loader_q=[]
-    record=[]
     # initialize weights and bias
     weights_init = 0.01 * np.random.randn(layer_number, 7, 3, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
@@ -235,7 +234,6 @@ if __name__ == '__main__':
         predictions=[]
         targets_train=[]
         all_images=[]
-        count = 0
         iter=1
         for batch_idx, (data, target) in enumerate(train_loader):
             encode_images_train=image_preprocessing(data)
