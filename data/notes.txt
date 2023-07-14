@@ -10,3 +10,6 @@
 30.06
 1. fix problems from 4 experiments with current data setting
 2. Contents table based on the template, experiments designs
+
+07.07
+1.Amplitude:differential and warning

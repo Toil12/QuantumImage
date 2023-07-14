@@ -12,7 +12,7 @@ import torch
 from torchvision import datasets, transforms
 import pennylane as qml
 
-QUBITS_NUMBER = 4
+QUBITS_NUMBER = 6
 
 dev = qml.device("default.qubit", wires=QUBITS_NUMBER, shots=1000)
 limits=[[-1.37332022,2.18239306],
@@ -31,11 +31,10 @@ limits=[[-1.37332022,2.18239306],
  [-1.3885267 ,2.04384712]]
 
 
-def encode_circuit_angle(a,qubits_number):
-    for i in range(qubits_number):
-        # angle=(a[i]-limits[i][0])/(limits[i][1]-limits[i][0])*np.pi
-        angle=np.arctan(a[i])
-        qml.RX(angle,wires=i)
+def encode_circuit_amplitude(f,qubits_number):
+    qml.AmplitudeEmbedding(features=f,
+                           wires=range(qubits_number),
+                           normalize=True)
 
 def ansatz_layer(W,qubits_num):
     for i in range(qubits_num):
@@ -48,12 +47,14 @@ def ansatz_layer(W,qubits_num):
 @qml.qnode(dev, interface='autograd')
 def circuit(weights, x,qubits_n):
 
-    encode_circuit_angle(a=x,
+    encode_circuit_amplitude(f=x,
                          qubits_number=qubits_n)
     for W in weights:
         ansatz_layer(W=W,qubits_num=qubits_n)
     # result=[qml.counts(qml.PauliZ(i)) for i in range(qubits_n)]
-    return qml.probs(qubits_n-1)
+    result=qml.probs(qubits_n-1)
+    return result
+
 
 def variational_classifier(weights, bias, x,qubits_number):
     parity_result = circuit(weights, x,qubits_number)
@@ -165,7 +166,7 @@ def show_recoverd_image(file_name):
     print(r)
     recover_image(r)
 
-def image_preprocessing_angle(data:np.ndarray):
+def image_preprocessing_amplitude(data:np.ndarray):
     sequences=[]
     for image in data:
         image_sequence = image.ravel()
@@ -173,19 +174,20 @@ def image_preprocessing_angle(data:np.ndarray):
         sequences.append(image_sequence)
     sequences=np.array(sequences).T
     torchtensor = torch.as_tensor(sequences.T)
-    pca = PCA(QUBITS_NUMBER)
-    pca.fit(torchtensor)
-    components = pca.transform(torchtensor)
-    return components
+    torchtensor=np.float64(torchtensor)
+    # p_type(torchtensor)
+    return torchtensor
 
+def p_type(number):
+    print(f"type is: {type(number)}" )
 
 if __name__ == '__main__':
-    sample_number=100
+    sample_number=50
     batch_size = 10
     learning_rate=0.01
-    epoch_number=50
-    layer_number = 2
-    embedding_methods="angle"
+    epoch_number=100
+    layer_number = 1
+    embedding_methods="amplitude"
 
     time_stamp = time.strftime("%d-%H%M%S", time.localtime())
     file_name = f"{embedding_methods}_{time_stamp}"
@@ -219,10 +221,20 @@ if __name__ == '__main__':
         count = 0
         iter=1
         for batch_idx, (data, target) in enumerate(train_loader):
-            encode_images = image_preprocessing_angle(data)
+            encode_images = image_preprocessing_amplitude(data)
+            # p_type(encode_images)
+            # print(encode_images.shape)
+            # print(encode_images)
+            # print(qml.draw(circuit)(weights,encode_images,QUBITS_NUMBER))
+            # print(dev.state)
             weights, bias, _, _ = opt.step(cost, weights, bias, encode_images, target)
+            # p_type(weights)
+            # p_type(bias)
+            # break
+        # break
 
             prediction = [variational_classifier(weights, bias, x, QUBITS_NUMBER) for x in encode_images]
+            # p_type(prediction)
             acc = accuracy(target, prediction)
             c = cost(weights, bias, encode_images, target)
             print(
@@ -243,7 +255,7 @@ if __name__ == '__main__':
         encode_images_val = []
         for id_val, (data, target) in enumerate(test_loader):
             targets_val = target
-            encode_images_val = image_preprocessing_angle(data)
+            encode_images_val = image_preprocessing_amplitude(data)
         predictions_val = [variational_classifier(weights, bias, x, QUBITS_NUMBER) for x in encode_images_val]
 
         epoch_acc = accuracy(targets, predictions)
