@@ -1,0 +1,15 @@
+autograd==1.4
+ipython==8.11.0
+matplotlib==3.5.1
+npy_append_array==0.9.16
+numpy==1.21.5
+numpy==1.22.3
+PennyLane==0.29.1
+qiskit==0.41.1
+qiskit_ibmq_provider==0.20.1
+qiskit_ignis==0.7.0
+qiskit_machine_learning==0.5.0
+qiskit_terra==0.23.2
+scikit_learn==1.0.2
+torch==1.9.1
+torchvision==0.10.1
