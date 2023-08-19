@@ -43,36 +43,36 @@ import numpy as np
 # lines=ax.plot([],[])
 # ax.set_autoscale_on(True)
 # ax.grid()
-loss1=np.load(f"./data/loss_epoch/angle_07-010206_loss.npy")
+loss1=np.load(f"./data/loss_epoch/FRQI_17-103207_loss.npy")
 # loss2=np.load(f"./data/FRQI_27-171924.npy")
 
-print(loss1)
-print(loss1_acc,loss1_val)
-for n in range(len(loss1)):
-      x=np.arange(len(loss1))
-y1=list(range(len(loss1_acc)))
-y2=list(range(len(loss1_val)))
-plt.plot(y1, loss1_acc, 'r')
-plt.plot(y2, loss1_val, 'b')
-plt.ylabel("accuracy")
-plt.xlabel("epoch")
-plt.show()
-
-plt.clf()
-
-# loss1_acc=loss1[:,1]
-# loss2_acc=loss2[:,1]
+# print(loss1)
+# print(loss1_acc,loss1_val)
 # for n in range(len(loss1)):
 #       x=np.arange(len(loss1))
 # y1=list(range(len(loss1_acc)))
-# y2=list(range(len(loss2_acc)))
+# y2=list(range(len(loss1_val)))
 # plt.plot(y1, loss1_acc, 'r')
-# plt.plot(y2, loss2_acc, 'b')
-# plt.ylabel("loss")
+# plt.plot(y2, loss1_val, 'b')
+# plt.ylabel("accuracy")
 # plt.xlabel("epoch")
 # plt.show()
 #
 # plt.clf()
+
+loss1_acc=loss1[:,1]
+loss2_acc=loss2[:,1]
+for n in range(len(loss1)):
+      x=np.arange(len(loss1))
+y1=list(range(len(loss1_acc)))
+y2=list(range(len(loss2_acc)))
+plt.plot(y1, loss1_acc, 'r')
+plt.plot(y2, loss2_acc, 'b')
+plt.ylabel("loss")
+plt.xlabel("epoch")
+plt.show()
+
+plt.clf()
 
 
 

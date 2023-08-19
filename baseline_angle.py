@@ -155,7 +155,7 @@ def recover_image(quantam_encode:list,show=True):
         image[raw][column] = color_gray
     image=torch.tensor(image)
     if show:
-        plt.imshow(image, cmap='gray')
+        plt.imshow(image, cmap='gray') 
         print(image)
         # plt.savefig('images/q.jpg')
         plt.show()
@@ -176,16 +176,17 @@ def image_preprocessing_angle(data:np.ndarray):
     pca = PCA(QUBITS_NUMBER)
     pca.fit(torchtensor)
     components = pca.transform(torchtensor)
-    return components
+    return components,sum(pca.explained_variance_ratio_)
 
 
 if __name__ == '__main__':
     sample_number=100
     batch_size = 10
     learning_rate=0.01
-    epoch_number=50
+    epoch_number=1
     layer_number = 2
     embedding_methods="angle"
+    seed=0
 
     time_stamp = time.strftime("%d-%H%M%S", time.localtime())
     file_name = f"{embedding_methods}_{time_stamp}"
@@ -196,18 +197,23 @@ if __name__ == '__main__':
                  f"batch size {batch_size}, "
                  f"learning rate {learning_rate}, "
                  f"epoch number {epoch_number}, "
-                 f"layer number {layer_number}")
+                 f"layer number {layer_number}, "
+                 f"pca parameter {QUBITS_NUMBER}, "
+                 f"numpy random seed {seed}")
     train_loader, test_loader,image_size=get_images(n_samples=sample_number,
                                                     batch_size=batch_size)
 
     start_time=time.time()
     # initialize weights and bias
-
+    np.random.seed(seed)
     weights_init = 0.01 * np.random.randn(layer_number, QUBITS_NUMBER, 3, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
     opt = NesterovMomentumOptimizer(learning_rate)
     weights = weights_init
     bias = bias_init
+
+    npaa_record = NpyAppendArray(f"./data/loss_epoch/{file_name}_loss.npy")
+    npaa_model = NpyAppendArray(f"./data/model/{file_name}_model.npy")
 
     for epoch in range(epoch_number):
         start_time = time.time()
@@ -218,8 +224,10 @@ if __name__ == '__main__':
         all_images=[]
         count = 0
         iter=1
+        min_info_ratio=1
         for batch_idx, (data, target) in enumerate(train_loader):
-            encode_images = image_preprocessing_angle(data)
+            encode_images,pca_ratio= image_preprocessing_angle(data)
+            min_info_ratio=min(min_info_ratio,pca_ratio)
             weights, bias, _, _ = opt.step(cost, weights, bias, encode_images, target)
 
             prediction = [variational_classifier(weights, bias, x, QUBITS_NUMBER) for x in encode_images]
@@ -243,31 +251,37 @@ if __name__ == '__main__':
         encode_images_val = []
         for id_val, (data, target) in enumerate(test_loader):
             targets_val = target
-            encode_images_val = image_preprocessing_angle(data)
+            encode_images_val,_ = image_preprocessing_angle(data)
         predictions_val = [variational_classifier(weights, bias, x, QUBITS_NUMBER) for x in encode_images_val]
 
         epoch_acc = accuracy(targets, predictions)
         epoch_cost = cost(weights, bias, all_images, targets)
         epoch_acc_val = accuracy(targets_val, predictions_val)
 
-        record_item=np.array([[epoch_acc,epoch_cost,epoch_acc_val]])
+        record_item=np.array([[epoch_acc,epoch_cost,epoch_acc_val,min_info_ratio]])
         end_time = time.time()
         time_cost = (end_time - start_time) / 60
         print("epoch {} : "
               "Accuracy {} , "
               "Loss {}, "
               "Time {}, "
-              "Val Accuracy {}".format(epoch + 1, epoch_acc, epoch_cost, time_cost, epoch_acc_val))
+              "Val Accuracy {}, "
+              "Minimal Info Left {}"
+              .format(epoch + 1, epoch_acc, epoch_cost, time_cost, epoch_acc_val,min_info_ratio))
         logging.info(f"epoch {epoch + 1} : "
                      f"Training Accuracy {epoch_acc} , "
                      f"Loss {epoch_cost}, "
                      f"Time {time_cost} minutes, "
-                     f"Validation Accuracy {epoch_acc_val}")
+                     f"Validation Accuracy {epoch_acc_val}, "
+                     f"Minimal Info Left {min_info_ratio}")
         # print(record_item)
-        with NpyAppendArray(f"./data/loss_epoch/{file_name}_loss.npy") as npaa:
-            npaa.append(record_item)
+
+        npaa_record.append(record_item)
         weights_store = np.array(weights).ravel()
         model = np.append(weights_store, bias)
         model = np.array([model])
-        with NpyAppendArray(f"./data/model/{file_name}_model.npy") as npaa:
-            npaa.append(model)
+        npaa_model.append(model)
+        npaa_model.append(model)
+
+    npaa_record.close()
+    npaa_model.close()

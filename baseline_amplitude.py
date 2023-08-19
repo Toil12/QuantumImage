@@ -185,9 +185,10 @@ if __name__ == '__main__':
     sample_number=50
     batch_size = 10
     learning_rate=0.01
-    epoch_number=100
+    epoch_number=10
     layer_number = 1
     embedding_methods="amplitude"
+    seed=0
 
     time_stamp = time.strftime("%d-%H%M%S", time.localtime())
     file_name = f"{embedding_methods}_{time_stamp}"
@@ -198,18 +199,22 @@ if __name__ == '__main__':
                  f"batch size {batch_size}, "
                  f"learning rate {learning_rate}, "
                  f"epoch number {epoch_number}, "
-                 f"layer number {layer_number}")
+                 f"layer number {layer_number}, "
+                 f"numpy random seed {seed}")
     train_loader, test_loader,image_size=get_images(n_samples=sample_number,
                                                     batch_size=batch_size)
 
     start_time=time.time()
     # initialize weights and bias
-
+    np.random.seed(seed)
     weights_init = 0.01 * np.random.randn(layer_number, QUBITS_NUMBER, 3, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
     opt = NesterovMomentumOptimizer(learning_rate)
     weights = weights_init
     bias = bias_init
+
+    npaa_record=NpyAppendArray(f"./data/loss_epoch/{file_name}_loss.npy")
+    npaa_model=NpyAppendArray(f"./data/model/{file_name}_model.npy")
 
     for epoch in range(epoch_number):
         start_time = time.time()
@@ -231,8 +236,6 @@ if __name__ == '__main__':
             # p_type(weights)
             # p_type(bias)
             # break
-        # break
-
             prediction = [variational_classifier(weights, bias, x, QUBITS_NUMBER) for x in encode_images]
             # p_type(prediction)
             acc = accuracy(target, prediction)
@@ -275,11 +278,13 @@ if __name__ == '__main__':
                      f"Loss {epoch_cost}, "
                      f"Time {time_cost} minutes, "
                      f"Validation Accuracy {epoch_acc_val}")
-        # print(record_item)
-        with NpyAppendArray(f"./data/loss_epoch/{file_name}_loss.npy") as npaa:
-            npaa.append(record_item)
+        # save results to file
+        npaa_record.append(record_item)
         weights_store = np.array(weights).ravel()
         model = np.append(weights_store, bias)
         model = np.array([model])
-        with NpyAppendArray(f"./data/model/{file_name}_model.npy") as npaa:
-            npaa.append(model)
+        npaa_model.append(model)
+        npaa_model.append(model)
+
+    npaa_record.close()
+    npaa_model.close()
