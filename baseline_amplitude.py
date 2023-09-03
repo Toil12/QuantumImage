@@ -14,7 +14,7 @@ import pennylane as qml
 
 QUBITS_NUMBER = 6
 
-dev = qml.device("default.qubit", wires=QUBITS_NUMBER, shots=1000)
+dev = qml.device("lightning.qubit", wires=QUBITS_NUMBER, shots=1000)
 limits=[[-1.37332022,2.18239306],
  [-1.40379974,2.14600127],
  [-1.44892358,1.98171103],
@@ -183,13 +183,14 @@ def p_type(number):
 
 if __name__ == '__main__':
     sample_number=50
-    batch_size = 10
+    batch_size = 20
     learning_rate=0.01
-    epoch_number=10
-    layer_number = 1
+    epoch_number=50
+    layer_number = 2
     embedding_methods="amplitude"
     seed=0
 
+    print(embedding_methods, sample_number, batch_size, learning_rate, epoch_number, layer_number, seed)
     time_stamp = time.strftime("%d-%H%M%S", time.localtime())
     file_name = f"{embedding_methods}_{time_stamp}"
     logging.basicConfig(level=logging.INFO,

@@ -1,0 +1,701 @@
+INFO:root:embedding methods angle, sample number 50, batch size 20, learning rate 0.01, epoch number 100, layer number 2, pca parameter 7, numpy random seed 0, qubits number 7
+INFO:root:start epoch 1
+INFO:root:Iter: 1| Accuracy: 0.5 | Loss: 0.3581473014690001
+INFO:root:Iter: 2| Accuracy: 0.5 | Loss: 0.3404594368422
+INFO:root:Iter: 3| Accuracy: 0.45 | Loss: 0.3419751387650097
+INFO:root:Iter: 4| Accuracy: 0.45 | Loss: 0.30612478071901233
+INFO:root:Iter: 5| Accuracy: 0.6 | Loss: 0.2175293496182439
+INFO:root:epoch 1 : Training Accuracy 0.5 , Loss 0.2810128606762956, Time 0.8267032980918885 minutes, Validation Accuracy 0.5, Minimal Info Left 0.8751280509049421
+INFO:root:start epoch 2
+INFO:root:Iter: 1| Accuracy: 0.55 | Loss: 0.23112213072061122
+INFO:root:Iter: 2| Accuracy: 0.4 | Loss: 0.2944443994057075
+INFO:root:Iter: 3| Accuracy: 0.6 | Loss: 0.2761085884588236
+INFO:root:Iter: 4| Accuracy: 0.5 | Loss: 0.27197680476205066
+INFO:root:Iter: 5| Accuracy: 0.6 | Loss: 0.2246141789643862
+INFO:root:epoch 2 : Training Accuracy 0.53 , Loss 0.23890852003116322, Time 0.8254549741744995 minutes, Validation Accuracy 0.54, Minimal Info Left 0.8737566154369637
+INFO:root:start epoch 3
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.18457376084379648
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.19288737028008354
+INFO:root:Iter: 3| Accuracy: 0.7 | Loss: 0.20042751942023135
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.20667987257516188
+INFO:root:Iter: 5| Accuracy: 0.65 | Loss: 0.21534165510058698
+INFO:root:epoch 3 : Training Accuracy 0.75 , Loss 0.1954926903944465, Time 0.8282480597496032 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8722157010910427
+INFO:root:start epoch 4
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.1974110624987257
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.20074546448146618
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.20557371361387905
+INFO:root:Iter: 4| Accuracy: 0.5 | Loss: 0.25172305293792907
+INFO:root:Iter: 5| Accuracy: 0.15 | Loss: 0.2909732862504361
+INFO:root:epoch 4 : Training Accuracy 0.6 , Loss 0.2286858430527312, Time 0.8208661476771036 minutes, Validation Accuracy 0.82, Minimal Info Left 0.8695045500440008
+INFO:root:start epoch 5
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.1924108663402802
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.20054520955149985
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.1793393592567308
+INFO:root:Iter: 4| Accuracy: 0.3 | Loss: 0.30912431578420546
+INFO:root:Iter: 5| Accuracy: 0.4 | Loss: 0.2637583094049094
+INFO:root:epoch 5 : Training Accuracy 0.62 , Loss 0.2280440825037041, Time 0.8196869889895121 minutes, Validation Accuracy 0.8, Minimal Info Left 0.867870733325406
+INFO:root:start epoch 6
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.21362409217058573
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.22677913727388327
+INFO:root:Iter: 3| Accuracy: 0.6 | Loss: 0.22403682755205234
+INFO:root:Iter: 4| Accuracy: 0.6 | Loss: 0.23129058959128934
+INFO:root:Iter: 5| Accuracy: 0.4 | Loss: 0.2469193658514314
+INFO:root:epoch 6 : Training Accuracy 0.63 , Loss 0.22429837535454258, Time 0.8622701009114583 minutes, Validation Accuracy 0.9, Minimal Info Left 0.8713302115364501
+INFO:root:start epoch 7
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.21740278276900787
+INFO:root:Iter: 2| Accuracy: 0.6 | Loss: 0.23983670595215592
+INFO:root:Iter: 3| Accuracy: 0.65 | Loss: 0.22449083739479817
+INFO:root:Iter: 4| Accuracy: 0.85 | Loss: 0.20484337438220468
+INFO:root:Iter: 5| Accuracy: 0.45 | Loss: 0.2801040331122856
+INFO:root:epoch 7 : Training Accuracy 0.68 , Loss 0.23230925374998748, Time 0.8802785436312358 minutes, Validation Accuracy 0.87, Minimal Info Left 0.865276122440795
+INFO:root:start epoch 8
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.22533161291457882
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.20982590169341417
+INFO:root:Iter: 3| Accuracy: 0.6 | Loss: 0.23746569755305263
+INFO:root:Iter: 4| Accuracy: 0.7 | Loss: 0.22602662143708185
+INFO:root:Iter: 5| Accuracy: 0.65 | Loss: 0.22900932888035444
+INFO:root:epoch 8 : Training Accuracy 0.7 , Loss 0.22583585176941398, Time 0.8938798983891805 minutes, Validation Accuracy 0.82, Minimal Info Left 0.8624110661926344
+INFO:root:start epoch 9
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.22095423469109413
+INFO:root:Iter: 2| Accuracy: 0.6 | Loss: 0.2395376184361598
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.2098172104092268
+INFO:root:Iter: 4| Accuracy: 0.45 | Loss: 0.2678845935860029
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.2265315389467339
+INFO:root:epoch 9 : Training Accuracy 0.65 , Loss 0.23281010593857004, Time 0.8928379893302918 minutes, Validation Accuracy 0.81, Minimal Info Left 0.8680031014423466
+INFO:root:start epoch 10
+INFO:root:Iter: 1| Accuracy: 0.45 | Loss: 0.2299734037246864
+INFO:root:Iter: 2| Accuracy: 0.65 | Loss: 0.2430338789879066
+INFO:root:Iter: 3| Accuracy: 0.65 | Loss: 0.234048025962599
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.20448339692886744
+INFO:root:Iter: 5| Accuracy: 0.55 | Loss: 0.24659321779139337
+INFO:root:epoch 10 : Training Accuracy 0.61 , Loss 0.23119136182580952, Time 0.8903811891873677 minutes, Validation Accuracy 0.81, Minimal Info Left 0.8419436240073412
+INFO:root:start epoch 11
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.22981585723074188
+INFO:root:Iter: 2| Accuracy: 0.55 | Loss: 0.2468811885463819
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.20017900058748297
+INFO:root:Iter: 4| Accuracy: 0.7 | Loss: 0.21419976493815768
+INFO:root:Iter: 5| Accuracy: 0.6 | Loss: 0.25768745383788344
+INFO:root:epoch 11 : Training Accuracy 0.69 , Loss 0.22755626741517357, Time 0.880550758043925 minutes, Validation Accuracy 0.82, Minimal Info Left 0.8522161854379388
+INFO:root:start epoch 12
+INFO:root:Iter: 1| Accuracy: 0.65 | Loss: 0.21462595689975933
+INFO:root:Iter: 2| Accuracy: 0.9 | Loss: 0.20398703869538895
+INFO:root:Iter: 3| Accuracy: 0.95 | Loss: 0.17661551272133652
+INFO:root:Iter: 4| Accuracy: 0.95 | Loss: 0.17747576170405688
+INFO:root:Iter: 5| Accuracy: 0.45 | Loss: 0.2705890089675879
+INFO:root:epoch 12 : Training Accuracy 0.78 , Loss 0.20829253067927012, Time 0.8784762938817342 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8202588349609513
+INFO:root:start epoch 13
+INFO:root:Iter: 1| Accuracy: 0.6 | Loss: 0.23218929183377673
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.21246131951919683
+INFO:root:Iter: 3| Accuracy: 0.9 | Loss: 0.19319655873824199
+INFO:root:Iter: 4| Accuracy: 0.55 | Loss: 0.24619578022690405
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.21883908648101177
+INFO:root:epoch 13 : Training Accuracy 0.69 , Loss 0.22204984118805796, Time 0.8813514312108358 minutes, Validation Accuracy 0.82, Minimal Info Left 0.8431821881298716
+INFO:root:start epoch 14
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.20763593092382893
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.19063079228614915
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.20671669192232095
+INFO:root:Iter: 4| Accuracy: 0.65 | Loss: 0.23282149020043477
+INFO:root:Iter: 5| Accuracy: 0.55 | Loss: 0.23209691089915516
+INFO:root:epoch 14 : Training Accuracy 0.72 , Loss 0.21503558600292746, Time 0.8703596512476603 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8716991232767032
+INFO:root:start epoch 15
+INFO:root:Iter: 1| Accuracy: 0.65 | Loss: 0.22634807030378362
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.2120661209284976
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.17697237660103995
+INFO:root:Iter: 4| Accuracy: 0.4 | Loss: 0.24031492712666985
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.22024821261286315
+INFO:root:epoch 15 : Training Accuracy 0.65 , Loss 0.21578368218205773, Time 0.8789330363273621 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8667667999467403
+INFO:root:start epoch 16
+INFO:root:Iter: 1| Accuracy: 0.65 | Loss: 0.21683769705003852
+INFO:root:Iter: 2| Accuracy: 0.9 | Loss: 0.18345755471461725
+INFO:root:Iter: 3| Accuracy: 0.6 | Loss: 0.2339836119296347
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.2167273916042322
+INFO:root:Iter: 5| Accuracy: 0.35 | Loss: 0.27806998450158754
+INFO:root:epoch 16 : Training Accuracy 0.65 , Loss 0.2257778375530334, Time 0.7647128105163574 minutes, Validation Accuracy 0.86, Minimal Info Left 0.856503775372051
+INFO:root:start epoch 17
+INFO:root:Iter: 1| Accuracy: 0.95 | Loss: 0.1676801349098595
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.20325394788478818
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.21176169803411468
+INFO:root:Iter: 4| Accuracy: 0.55 | Loss: 0.22701906267114985
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.21130149523860914
+INFO:root:epoch 17 : Training Accuracy 0.77 , Loss 0.20610735757287535, Time 0.7595001459121704 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8536395250879949
+INFO:root:start epoch 18
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.2182010492233426
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.20882698185603443
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.2084192817122516
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.2116954403802942
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.2031580250926869
+INFO:root:epoch 18 : Training Accuracy 0.79 , Loss 0.21118195771461384, Time 0.757056450843811 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8640503363523873
+INFO:root:start epoch 19
+INFO:root:Iter: 1| Accuracy: 0.9 | Loss: 0.18438727731435975
+INFO:root:Iter: 2| Accuracy: 0.5 | Loss: 0.26373550340711616
+INFO:root:Iter: 3| Accuracy: 0.45 | Loss: 0.2534636550040305
+INFO:root:Iter: 4| Accuracy: 1.0 | Loss: 0.177303027479962
+INFO:root:Iter: 5| Accuracy: 0.5 | Loss: 0.24657359571732326
+INFO:root:epoch 19 : Training Accuracy 0.67 , Loss 0.22477159802713523, Time 0.7543413837750753 minutes, Validation Accuracy 0.83, Minimal Info Left 0.8509627843676794
+INFO:root:start epoch 20
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.20977297779895224
+INFO:root:Iter: 2| Accuracy: 0.65 | Loss: 0.2264553279458096
+INFO:root:Iter: 3| Accuracy: 0.95 | Loss: 0.2049157448120579
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.2150286591273157
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.18567483886566497
+INFO:root:epoch 20 : Training Accuracy 0.79 , Loss 0.21006994003545837, Time 0.754925262928009 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8726099244935103
+INFO:root:start epoch 21
+INFO:root:Iter: 1| Accuracy: 0.55 | Loss: 0.2451976891370343
+INFO:root:Iter: 2| Accuracy: 0.3 | Loss: 0.2668546416561727
+INFO:root:Iter: 3| Accuracy: 0.5 | Loss: 0.2557396167110181
+INFO:root:Iter: 4| Accuracy: 0.95 | Loss: 0.17450269698766646
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.21304241912980437
+INFO:root:epoch 21 : Training Accuracy 0.6 , Loss 0.2323218426493949, Time 0.7526169657707215 minutes, Validation Accuracy 0.83, Minimal Info Left 0.8321323223552175
+INFO:root:start epoch 22
+INFO:root:Iter: 1| Accuracy: 0.45 | Loss: 0.2671295850536393
+INFO:root:Iter: 2| Accuracy: 0.65 | Loss: 0.23132812959844024
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.19836733390022915
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.20537299884209453
+INFO:root:Iter: 5| Accuracy: 0.35 | Loss: 0.2735173939602809
+INFO:root:epoch 22 : Training Accuracy 0.61 , Loss 0.23474253134830644, Time 0.7545452316602071 minutes, Validation Accuracy 0.86, Minimal Info Left 0.854567275245824
+INFO:root:start epoch 23
+INFO:root:Iter: 1| Accuracy: 0.5 | Loss: 0.24108512152091208
+INFO:root:Iter: 2| Accuracy: 0.55 | Loss: 0.246628317533998
+INFO:root:Iter: 3| Accuracy: 0.5 | Loss: 0.24031330487309135
+INFO:root:Iter: 4| Accuracy: 0.85 | Loss: 0.21251758812884192
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.21862541029826038
+INFO:root:epoch 23 : Training Accuracy 0.64 , Loss 0.2333761526406893, Time 0.7494466185569764 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8320676826429363
+INFO:root:start epoch 24
+INFO:root:Iter: 1| Accuracy: 0.45 | Loss: 0.23493342684821536
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.21327860894373316
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.21897260573285277
+INFO:root:Iter: 4| Accuracy: 0.55 | Loss: 0.25086242196275793
+INFO:root:Iter: 5| Accuracy: 0.65 | Loss: 0.22087769901583543
+INFO:root:epoch 24 : Training Accuracy 0.62 , Loss 0.22859359820013986, Time 0.7498246749242147 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8441899616869737
+INFO:root:start epoch 25
+INFO:root:Iter: 1| Accuracy: 0.6 | Loss: 0.2162428095757271
+INFO:root:Iter: 2| Accuracy: 0.65 | Loss: 0.22759374752930248
+INFO:root:Iter: 3| Accuracy: 0.55 | Loss: 0.23742020191643162
+INFO:root:Iter: 4| Accuracy: 0.65 | Loss: 0.24485855342684332
+INFO:root:Iter: 5| Accuracy: 0.85 | Loss: 0.19029115761257437
+INFO:root:epoch 25 : Training Accuracy 0.66 , Loss 0.22506725291799307, Time 0.7486581047375996 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8737387964342342
+INFO:root:start epoch 26
+INFO:root:Iter: 1| Accuracy: 0.75 | Loss: 0.20572757914015388
+INFO:root:Iter: 2| Accuracy: 0.5 | Loss: 0.26828266520302335
+INFO:root:Iter: 3| Accuracy: 0.5 | Loss: 0.24979062107805752
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.21098445753906003
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.18990151905159866
+INFO:root:epoch 26 : Training Accuracy 0.66 , Loss 0.22476840751756608, Time 0.7500236829121908 minutes, Validation Accuracy 0.82, Minimal Info Left 0.8646938154946964
+INFO:root:start epoch 27
+INFO:root:Iter: 1| Accuracy: 0.9 | Loss: 0.1718497795763218
+INFO:root:Iter: 2| Accuracy: 0.9 | Loss: 0.1802557309661587
+INFO:root:Iter: 3| Accuracy: 0.65 | Loss: 0.22295745741536513
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.19158417715659473
+INFO:root:Iter: 5| Accuracy: 0.6 | Loss: 0.23733069209242288
+INFO:root:epoch 27 : Training Accuracy 0.76 , Loss 0.20128934685274125, Time 0.7496834397315979 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8646778898160291
+INFO:root:start epoch 28
+INFO:root:Iter: 1| Accuracy: 0.65 | Loss: 0.22376532455581777
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.18585288656391888
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.20113387848214362
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.2215896623321006
+INFO:root:Iter: 5| Accuracy: 0.85 | Loss: 0.21161404476754236
+INFO:root:epoch 28 : Training Accuracy 0.78 , Loss 0.2082961929606006, Time 0.7509390552838643 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8673887015770019
+INFO:root:start epoch 29
+INFO:root:Iter: 1| Accuracy: 0.65 | Loss: 0.2238093491870777
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.21248832028214273
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.22378852012418465
+INFO:root:Iter: 4| Accuracy: 0.35 | Loss: 0.2806572586702372
+INFO:root:Iter: 5| Accuracy: 0.65 | Loss: 0.21596741828937277
+INFO:root:epoch 29 : Training Accuracy 0.62 , Loss 0.23232699959838932, Time 0.7512089530626933 minutes, Validation Accuracy 0.86, Minimal Info Left 0.864315594306181
+INFO:root:start epoch 30
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.1999945181373401
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.19715923262381788
+INFO:root:Iter: 3| Accuracy: 0.7 | Loss: 0.23178076325368463
+INFO:root:Iter: 4| Accuracy: 0.85 | Loss: 0.19541785214947122
+INFO:root:Iter: 5| Accuracy: 0.45 | Loss: 0.2772976842976076
+INFO:root:epoch 30 : Training Accuracy 0.72 , Loss 0.22070917971269452, Time 0.7507839878400167 minutes, Validation Accuracy 0.88, Minimal Info Left 0.8624605815511018
+INFO:root:start epoch 31
+INFO:root:Iter: 1| Accuracy: 0.95 | Loss: 0.17623236943810028
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.2077288221040876
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.2033596857741696
+INFO:root:Iter: 4| Accuracy: 0.5 | Loss: 0.24747861633822293
+INFO:root:Iter: 5| Accuracy: 0.85 | Loss: 0.19336345492985635
+INFO:root:epoch 31 : Training Accuracy 0.77 , Loss 0.2055206677357191, Time 0.7504443844159444 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8763113074789977
+INFO:root:start epoch 32
+INFO:root:Iter: 1| Accuracy: 0.75 | Loss: 0.22990670778589356
+INFO:root:Iter: 2| Accuracy: 0.65 | Loss: 0.24587422341956958
+INFO:root:Iter: 3| Accuracy: 0.55 | Loss: 0.22792673523073265
+INFO:root:Iter: 4| Accuracy: 0.35 | Loss: 0.29825372129352573
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.2296156785021993
+INFO:root:epoch 32 : Training Accuracy 0.6 , Loss 0.24677254500483908, Time 0.7522246996561687 minutes, Validation Accuracy 0.87, Minimal Info Left 0.8193224037031052
+INFO:root:start epoch 33
+INFO:root:Iter: 1| Accuracy: 0.95 | Loss: 0.19036797817117487
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.1922565926252494
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.20707361677803213
+INFO:root:Iter: 4| Accuracy: 0.2 | Loss: 0.28998481073124155
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.2325174078326072
+INFO:root:epoch 33 : Training Accuracy 0.7 , Loss 0.2232784172295575, Time 0.750182056427002 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8515978187020229
+INFO:root:start epoch 34
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.19648773401617076
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.22108023388576742
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.2045265446173959
+INFO:root:Iter: 4| Accuracy: 0.2 | Loss: 0.30347635100383596
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.217639946140242
+INFO:root:epoch 34 : Training Accuracy 0.66 , Loss 0.22867922252550493, Time 0.7491314172744751 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8594471400966092
+INFO:root:start epoch 35
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.2031187399563723
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.21858786899601954
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.1804558246369648
+INFO:root:Iter: 4| Accuracy: 0.45 | Loss: 0.2608041113558758
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.2186196114646392
+INFO:root:epoch 35 : Training Accuracy 0.72 , Loss 0.21555819719537925, Time 0.7494272708892822 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8507474381244498
+INFO:root:start epoch 36
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.22741339433061344
+INFO:root:Iter: 2| Accuracy: 0.9 | Loss: 0.19214466715249515
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.1999906746922486
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.20764037725359633
+INFO:root:Iter: 5| Accuracy: 0.5 | Loss: 0.2751545065280215
+INFO:root:epoch 36 : Training Accuracy 0.75 , Loss 0.22113370963124526, Time 0.7494017918904622 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8430468083106668
+INFO:root:start epoch 37
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.21795141875133267
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.19633243000761907
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.21175842411282447
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.23939662134477535
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.19980408334172023
+INFO:root:epoch 37 : Training Accuracy 0.76 , Loss 0.21187352434180315, Time 0.7500886758168538 minutes, Validation Accuracy 0.85, Minimal Info Left 0.865561021844183
+INFO:root:start epoch 38
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.17485380940708808
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.23905587446974325
+INFO:root:Iter: 3| Accuracy: 0.65 | Loss: 0.234413888908184
+INFO:root:Iter: 4| Accuracy: 0.5 | Loss: 0.24916113941488266
+INFO:root:Iter: 5| Accuracy: 0.6 | Loss: 0.2242038133738356
+INFO:root:epoch 38 : Training Accuracy 0.66 , Loss 0.2264895720520071, Time 0.7499755144119262 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8703069187152087
+INFO:root:start epoch 39
+INFO:root:Iter: 1| Accuracy: 0.95 | Loss: 0.16533357863405235
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.20380657693480903
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.2324876463508713
+INFO:root:Iter: 4| Accuracy: 0.5 | Loss: 0.2434619025534766
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.22695655330967832
+INFO:root:epoch 39 : Training Accuracy 0.74 , Loss 0.21117446454383199, Time 0.7486525376637777 minutes, Validation Accuracy 0.87, Minimal Info Left 0.8387593956002616
+INFO:root:start epoch 40
+INFO:root:Iter: 1| Accuracy: 0.6 | Loss: 0.22820732424729367
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.19673678893904278
+INFO:root:Iter: 3| Accuracy: 0.9 | Loss: 0.1914202239822901
+INFO:root:Iter: 4| Accuracy: 0.7 | Loss: 0.2220904790836026
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.2243623246997822
+INFO:root:epoch 40 : Training Accuracy 0.76 , Loss 0.21351648558450514, Time 0.7502580920855204 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8585403638060077
+INFO:root:start epoch 41
+INFO:root:Iter: 1| Accuracy: 0.9 | Loss: 0.187293071117201
+INFO:root:Iter: 2| Accuracy: 0.9 | Loss: 0.1720791437169044
+INFO:root:Iter: 3| Accuracy: 0.65 | Loss: 0.22822239271920738
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.2033306455592337
+INFO:root:Iter: 5| Accuracy: 0.3 | Loss: 0.2871692763371799
+INFO:root:epoch 41 : Training Accuracy 0.71 , Loss 0.21523076875492994, Time 0.750545346736908 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8800144612791174
+INFO:root:start epoch 42
+INFO:root:Iter: 1| Accuracy: 0.35 | Loss: 0.2391770910193627
+INFO:root:Iter: 2| Accuracy: 0.55 | Loss: 0.2327427466571046
+INFO:root:Iter: 3| Accuracy: 0.7 | Loss: 0.20530949938956664
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.19217185369466105
+INFO:root:Iter: 5| Accuracy: 0.55 | Loss: 0.24789432019508778
+INFO:root:epoch 42 : Training Accuracy 0.59 , Loss 0.22360623923429024, Time 0.7494302272796631 minutes, Validation Accuracy 0.81, Minimal Info Left 0.8487946535589976
+INFO:root:start epoch 43
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.21205270161421136
+INFO:root:Iter: 2| Accuracy: 0.25 | Loss: 0.27802111435192767
+INFO:root:Iter: 3| Accuracy: 0.7 | Loss: 0.21151623369321798
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.208411934407725
+INFO:root:Iter: 5| Accuracy: 0.85 | Loss: 0.19030923645635608
+INFO:root:epoch 43 : Training Accuracy 0.66 , Loss 0.22115649512483382, Time 0.7499740839004516 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8676604395457643
+INFO:root:start epoch 44
+INFO:root:Iter: 1| Accuracy: 0.4 | Loss: 0.27585461761779134
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.18731912383343802
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.20353512509946298
+INFO:root:Iter: 4| Accuracy: 0.65 | Loss: 0.22591479283204893
+INFO:root:Iter: 5| Accuracy: 0.9 | Loss: 0.17498130897245193
+INFO:root:epoch 44 : Training Accuracy 0.72 , Loss 0.214721387683947, Time 0.7499202370643616 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8465505365191618
+INFO:root:start epoch 45
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.19979360579951946
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.21140528641139006
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.19406353384497452
+INFO:root:Iter: 4| Accuracy: 0.6 | Loss: 0.22956507243215757
+INFO:root:Iter: 5| Accuracy: 0.4 | Loss: 0.26183184869613607
+INFO:root:epoch 45 : Training Accuracy 0.7 , Loss 0.2191489613764506, Time 0.7479047099749248 minutes, Validation Accuracy 0.89, Minimal Info Left 0.8570669007216728
+INFO:root:start epoch 46
+INFO:root:Iter: 1| Accuracy: 0.35 | Loss: 0.28430122425585275
+INFO:root:Iter: 2| Accuracy: 0.5 | Loss: 0.25214564415665564
+INFO:root:Iter: 3| Accuracy: 0.7 | Loss: 0.21205574314289827
+INFO:root:Iter: 4| Accuracy: 0.9 | Loss: 0.17580344633706152
+INFO:root:Iter: 5| Accuracy: 0.6 | Loss: 0.2310522831892856
+INFO:root:epoch 46 : Training Accuracy 0.61 , Loss 0.2306235527498094, Time 0.7501825133959452 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8737839810586838
+INFO:root:start epoch 47
+INFO:root:Iter: 1| Accuracy: 0.5 | Loss: 0.25312369070802737
+INFO:root:Iter: 2| Accuracy: 0.5 | Loss: 0.233073558833539
+INFO:root:Iter: 3| Accuracy: 0.9 | Loss: 0.18943081523628236
+INFO:root:Iter: 4| Accuracy: 0.95 | Loss: 0.17341087269081093
+INFO:root:Iter: 5| Accuracy: 0.85 | Loss: 0.21052916023558063
+INFO:root:epoch 47 : Training Accuracy 0.74 , Loss 0.21246064391625957, Time 0.7486662268638611 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8459642163051312
+INFO:root:start epoch 48
+INFO:root:Iter: 1| Accuracy: 0.4 | Loss: 0.27410973256689425
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.21248315653381372
+INFO:root:Iter: 3| Accuracy: 0.7 | Loss: 0.23379642688211053
+INFO:root:Iter: 4| Accuracy: 0.7 | Loss: 0.2232800826987736
+INFO:root:Iter: 5| Accuracy: 0.65 | Loss: 0.2373012366865716
+INFO:root:epoch 48 : Training Accuracy 0.65 , Loss 0.23654506734448538, Time 0.7479808171590169 minutes, Validation Accuracy 0.83, Minimal Info Left 0.8708680278796077
+INFO:root:start epoch 49
+INFO:root:Iter: 1| Accuracy: 0.75 | Loss: 0.20117983497883718
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.22120043336171352
+INFO:root:Iter: 3| Accuracy: 0.95 | Loss: 0.18088842599019705
+INFO:root:Iter: 4| Accuracy: 0.45 | Loss: 0.25260741761162275
+INFO:root:Iter: 5| Accuracy: 0.9 | Loss: 0.18481520871852672
+INFO:root:epoch 49 : Training Accuracy 0.76 , Loss 0.2078208826350255, Time 0.7483496308326721 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8640031538401314
+INFO:root:start epoch 50
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.1920564334137202
+INFO:root:Iter: 2| Accuracy: 0.65 | Loss: 0.21928187557314108
+INFO:root:Iter: 3| Accuracy: 0.9 | Loss: 0.1686578842686735
+INFO:root:Iter: 4| Accuracy: 0.7 | Loss: 0.1980407089038243
+INFO:root:Iter: 5| Accuracy: 0.55 | Loss: 0.2632576098412159
+INFO:root:epoch 50 : Training Accuracy 0.72 , Loss 0.20972000811390937, Time 0.7477784554163615 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8496629841990775
+INFO:root:start epoch 51
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.22463205107744702
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.22634520908665023
+INFO:root:Iter: 3| Accuracy: 0.9 | Loss: 0.17830765472097582
+INFO:root:Iter: 4| Accuracy: 0.65 | Loss: 0.21580623346582933
+INFO:root:Iter: 5| Accuracy: 0.3 | Loss: 0.2834349288062037
+INFO:root:epoch 51 : Training Accuracy 0.65 , Loss 0.22713017307955194, Time 0.7489045659701029 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8748010463748482
+INFO:root:start epoch 52
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.19488071075890606
+INFO:root:Iter: 2| Accuracy: 0.6 | Loss: 0.2280293369755165
+INFO:root:Iter: 3| Accuracy: 0.55 | Loss: 0.2427016178592203
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.20215320848235066
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.18327298315048962
+INFO:root:epoch 52 : Training Accuracy 0.72 , Loss 0.21151745329337676, Time 0.748274314403534 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8662799812605778
+INFO:root:start epoch 53
+INFO:root:Iter: 1| Accuracy: 0.5 | Loss: 0.23942151707844506
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.21824482201250692
+INFO:root:Iter: 3| Accuracy: 0.45 | Loss: 0.28115658401352056
+INFO:root:Iter: 4| Accuracy: 0.6 | Loss: 0.22083067352458832
+INFO:root:Iter: 5| Accuracy: 0.4 | Loss: 0.2793282480920988
+INFO:root:epoch 53 : Training Accuracy 0.54 , Loss 0.2469812461197178, Time 0.7475639700889587 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8543631357082598
+INFO:root:start epoch 54
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.20208393561798718
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.18512849075146723
+INFO:root:Iter: 3| Accuracy: 0.65 | Loss: 0.21904957317217777
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.21913154334898044
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.21133261607247786
+INFO:root:epoch 54 : Training Accuracy 0.77 , Loss 0.2044253197110696, Time 0.7485920508702596 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8752451334543946
+INFO:root:start epoch 55
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.2004457996497428
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.21160983938143424
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.20076736917712532
+INFO:root:Iter: 4| Accuracy: 0.65 | Loss: 0.23785537008458196
+INFO:root:Iter: 5| Accuracy: 0.85 | Loss: 0.2173867791105326
+INFO:root:epoch 55 : Training Accuracy 0.8 , Loss 0.21413285980341396, Time 0.74993021885554 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8142438866299432
+INFO:root:start epoch 56
+INFO:root:Iter: 1| Accuracy: 0.4 | Loss: 0.25753293294565716
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.21804897656702488
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.22280585298290637
+INFO:root:Iter: 4| Accuracy: 0.7 | Loss: 0.22875651299356256
+INFO:root:Iter: 5| Accuracy: 0.65 | Loss: 0.22696373880777054
+INFO:root:epoch 56 : Training Accuracy 0.65 , Loss 0.23341406674842347, Time 0.7500313282012939 minutes, Validation Accuracy 0.83, Minimal Info Left 0.8674436101738959
+INFO:root:start epoch 57
+INFO:root:Iter: 1| Accuracy: 0.45 | Loss: 0.26748940990730086
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.2077422246240957
+INFO:root:Iter: 3| Accuracy: 0.6 | Loss: 0.25753113684446083
+INFO:root:Iter: 4| Accuracy: 0.7 | Loss: 0.2232020570094158
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.20873414750099228
+INFO:root:epoch 57 : Training Accuracy 0.64 , Loss 0.2348340776697044, Time 0.7507634043693543 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8596116954403475
+INFO:root:start epoch 58
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.1887111451522084
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.20652695590452536
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.2155717918778545
+INFO:root:Iter: 4| Accuracy: 0.5 | Loss: 0.25204631336351274
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.19179888158305441
+INFO:root:epoch 58 : Training Accuracy 0.76 , Loss 0.21363319093889324, Time 0.7489299535751343 minutes, Validation Accuracy 0.82, Minimal Info Left 0.8607259043273254
+INFO:root:start epoch 59
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.2227135538445975
+INFO:root:Iter: 2| Accuracy: 0.65 | Loss: 0.2210240973505353
+INFO:root:Iter: 3| Accuracy: 0.9 | Loss: 0.18767705287302938
+INFO:root:Iter: 4| Accuracy: 0.35 | Loss: 0.27107187792783904
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.19368861726994951
+INFO:root:epoch 59 : Training Accuracy 0.69 , Loss 0.21805312153261347, Time 0.7491542816162109 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8568367410264996
+INFO:root:start epoch 60
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.1822900316012557
+INFO:root:Iter: 2| Accuracy: 0.45 | Loss: 0.25901053770460425
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.19796533230430957
+INFO:root:Iter: 4| Accuracy: 0.4 | Loss: 0.26278096481256824
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.2047669476470829
+INFO:root:epoch 60 : Training Accuracy 0.64 , Loss 0.22423571598737485, Time 0.7493424892425538 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8627377215594686
+INFO:root:start epoch 61
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.18624800284010107
+INFO:root:Iter: 2| Accuracy: 0.5 | Loss: 0.2441139085423739
+INFO:root:Iter: 3| Accuracy: 0.6 | Loss: 0.23443487358616788
+INFO:root:Iter: 4| Accuracy: 0.6 | Loss: 0.21070287259822132
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.21304946293832602
+INFO:root:epoch 61 : Training Accuracy 0.67 , Loss 0.22039612240282608, Time 0.7497597416241963 minutes, Validation Accuracy 0.87, Minimal Info Left 0.8623154003217971
+INFO:root:start epoch 62
+INFO:root:Iter: 1| Accuracy: 0.95 | Loss: 0.19796520546737506
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.21196120942231617
+INFO:root:Iter: 3| Accuracy: 0.65 | Loss: 0.23538925933897065
+INFO:root:Iter: 4| Accuracy: 0.85 | Loss: 0.19318337425956772
+INFO:root:Iter: 5| Accuracy: 0.45 | Loss: 0.2687599523239412
+INFO:root:epoch 62 : Training Accuracy 0.73 , Loss 0.22217264231778255, Time 0.7489256183306376 minutes, Validation Accuracy 0.86, Minimal Info Left 0.878253083064993
+INFO:root:start epoch 63
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.21444242019181975
+INFO:root:Iter: 2| Accuracy: 0.65 | Loss: 0.2302321270585926
+INFO:root:Iter: 3| Accuracy: 0.4 | Loss: 0.2709421118505574
+INFO:root:Iter: 4| Accuracy: 0.85 | Loss: 0.1982676246608624
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.2189191572931494
+INFO:root:epoch 63 : Training Accuracy 0.68 , Loss 0.22601054772842105, Time 0.748957633972168 minutes, Validation Accuracy 0.82, Minimal Info Left 0.8298973628989609
+INFO:root:start epoch 64
+INFO:root:Iter: 1| Accuracy: 0.6 | Loss: 0.2552125488077777
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.2022458542371634
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.2156930729751298
+INFO:root:Iter: 4| Accuracy: 0.85 | Loss: 0.19792573666270025
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.20060969858498584
+INFO:root:epoch 64 : Training Accuracy 0.75 , Loss 0.2152529114001517, Time 0.7489324331283569 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8693803403277547
+INFO:root:start epoch 65
+INFO:root:Iter: 1| Accuracy: 0.65 | Loss: 0.24065091412315692
+INFO:root:Iter: 2| Accuracy: 0.5 | Loss: 0.2404179699623752
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.22144170573920205
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.22055520625752628
+INFO:root:Iter: 5| Accuracy: 0.25 | Loss: 0.28052862588560734
+INFO:root:epoch 65 : Training Accuracy 0.58 , Loss 0.24117888369508553, Time 0.7496934215227763 minutes, Validation Accuracy 0.88, Minimal Info Left 0.8744446568020786
+INFO:root:start epoch 66
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.21746891572251453
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.21962870844596086
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.20755890794464782
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.19006066094671709
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.2176470345132037
+INFO:root:epoch 66 : Training Accuracy 0.77 , Loss 0.20932487632324195, Time 0.7480178316434224 minutes, Validation Accuracy 0.83, Minimal Info Left 0.8479904320648546
+INFO:root:start epoch 67
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.21257840488772123
+INFO:root:Iter: 2| Accuracy: 0.5 | Loss: 0.24824222866250226
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.19556248393275724
+INFO:root:Iter: 4| Accuracy: 0.35 | Loss: 0.27590252728013304
+INFO:root:Iter: 5| Accuracy: 0.45 | Loss: 0.25194701311944595
+INFO:root:epoch 67 : Training Accuracy 0.57 , Loss 0.2363348780796023, Time 0.7493132551511129 minutes, Validation Accuracy 0.88, Minimal Info Left 0.8592857522432894
+INFO:root:start epoch 68
+INFO:root:Iter: 1| Accuracy: 0.95 | Loss: 0.18117722197962363
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.25202240157245304
+INFO:root:Iter: 3| Accuracy: 0.6 | Loss: 0.23987968625583167
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.21011886750109596
+INFO:root:Iter: 5| Accuracy: 0.6 | Loss: 0.22953792136005996
+INFO:root:epoch 68 : Training Accuracy 0.72 , Loss 0.2217946262611205, Time 0.7487277865409852 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8505780852158272
+INFO:root:start epoch 69
+INFO:root:Iter: 1| Accuracy: 0.6 | Loss: 0.23057257038244536
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.20702075606986106
+INFO:root:Iter: 3| Accuracy: 0.3 | Loss: 0.2744522260426044
+INFO:root:Iter: 4| Accuracy: 0.55 | Loss: 0.23999028912095777
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.23801523498165883
+INFO:root:epoch 69 : Training Accuracy 0.58 , Loss 0.23658588290391772, Time 0.7499510208765666 minutes, Validation Accuracy 0.84, Minimal Info Left 0.8564836088472584
+INFO:root:start epoch 70
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.19444959077917293
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.1946731938042416
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.22241515199586875
+INFO:root:Iter: 4| Accuracy: 0.7 | Loss: 0.22254073730508606
+INFO:root:Iter: 5| Accuracy: 0.35 | Loss: 0.27814961358545326
+INFO:root:epoch 70 : Training Accuracy 0.69 , Loss 0.22218473230895858, Time 0.7485347112019857 minutes, Validation Accuracy 0.83, Minimal Info Left 0.8529600832609026
+INFO:root:start epoch 71
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.23530997087956812
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.20391907400289422
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.2241322688984244
+INFO:root:Iter: 4| Accuracy: 0.85 | Loss: 0.19869432280547603
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.2069194675831473
+INFO:root:epoch 71 : Training Accuracy 0.76 , Loss 0.21217950356796758, Time 0.7488596796989441 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8772154578839215
+INFO:root:start epoch 72
+INFO:root:Iter: 1| Accuracy: 0.9 | Loss: 0.17865060402832433
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.2250037005437555
+INFO:root:Iter: 3| Accuracy: 0.7 | Loss: 0.22455826542578947
+INFO:root:Iter: 4| Accuracy: 0.9 | Loss: 0.1968284161349287
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.22403074082064928
+INFO:root:epoch 72 : Training Accuracy 0.78 , Loss 0.21010562505574729, Time 0.7484073440233866 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8347387816210475
+INFO:root:start epoch 73
+INFO:root:Iter: 1| Accuracy: 0.45 | Loss: 0.2921910716652013
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.2166731424920702
+INFO:root:Iter: 3| Accuracy: 0.35 | Loss: 0.26464399865049965
+INFO:root:Iter: 4| Accuracy: 0.65 | Loss: 0.23900076895232242
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.19668946583983724
+INFO:root:epoch 73 : Training Accuracy 0.59 , Loss 0.24118528404357786, Time 0.7496904253959655 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8554906541986558
+INFO:root:start epoch 74
+INFO:root:Iter: 1| Accuracy: 0.5 | Loss: 0.26511868154863627
+INFO:root:Iter: 2| Accuracy: 0.6 | Loss: 0.2445898754433548
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.1812816343299461
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.20830073255956222
+INFO:root:Iter: 5| Accuracy: 0.55 | Loss: 0.23242379858755924
+INFO:root:epoch 74 : Training Accuracy 0.65 , Loss 0.22883866677214468, Time 0.749496606985728 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8669115552324487
+INFO:root:start epoch 75
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.20758078929817292
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.18597334669235183
+INFO:root:Iter: 3| Accuracy: 1.0 | Loss: 0.1663545158641208
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.2069954290487769
+INFO:root:Iter: 5| Accuracy: 0.65 | Loss: 0.2333350103174201
+INFO:root:epoch 75 : Training Accuracy 0.81 , Loss 0.1996441296893609, Time 0.7501980384190877 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8654336071902913
+INFO:root:start epoch 76
+INFO:root:Iter: 1| Accuracy: 0.3 | Loss: 0.2749558317393725
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.19387963000288422
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.20088833054629776
+INFO:root:Iter: 4| Accuracy: 0.7 | Loss: 0.23161698965369348
+INFO:root:Iter: 5| Accuracy: 0.85 | Loss: 0.20772004931092783
+INFO:root:epoch 76 : Training Accuracy 0.71 , Loss 0.22083225001823042, Time 0.7486968437830607 minutes, Validation Accuracy 0.87, Minimal Info Left 0.851287734843287
+INFO:root:start epoch 77
+INFO:root:Iter: 1| Accuracy: 0.95 | Loss: 0.17592592865758272
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.2069368441099242
+INFO:root:Iter: 3| Accuracy: 0.65 | Loss: 0.2335334290362782
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.20265027070535663
+INFO:root:Iter: 5| Accuracy: 0.3 | Loss: 0.27134572860571515
+INFO:root:epoch 77 : Training Accuracy 0.69 , Loss 0.21881364917950513, Time 0.7488575379053751 minutes, Validation Accuracy 0.87, Minimal Info Left 0.8855107145684407
+INFO:root:start epoch 78
+INFO:root:Iter: 1| Accuracy: 0.85 | Loss: 0.20801633074340203
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.21476739296327843
+INFO:root:Iter: 3| Accuracy: 0.7 | Loss: 0.22418041758048007
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.21532907642751092
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.18700263482583232
+INFO:root:epoch 78 : Training Accuracy 0.78 , Loss 0.20921478516562608, Time 0.7478981892267863 minutes, Validation Accuracy 0.86, Minimal Info Left 0.86643574166319
+INFO:root:start epoch 79
+INFO:root:Iter: 1| Accuracy: 0.9 | Loss: 0.17717410194637984
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.21020249436471833
+INFO:root:Iter: 3| Accuracy: 0.9 | Loss: 0.19805966240168685
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.24382809988853618
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.22156568675822497
+INFO:root:epoch 79 : Training Accuracy 0.83 , Loss 0.2079304440127409, Time 0.7482551574707031 minutes, Validation Accuracy 0.9, Minimal Info Left 0.8784812475299417
+INFO:root:start epoch 80
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.22159748957138176
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.22406899345687986
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.20703630878456186
+INFO:root:Iter: 4| Accuracy: 0.7 | Loss: 0.20479295204315862
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.2205060616490318
+INFO:root:epoch 80 : Training Accuracy 0.76 , Loss 0.21738771213584343, Time 0.7509830633799235 minutes, Validation Accuracy 0.87, Minimal Info Left 0.8540763345140667
+INFO:root:start epoch 81
+INFO:root:Iter: 1| Accuracy: 0.65 | Loss: 0.2117233155209138
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.20568236796618883
+INFO:root:Iter: 3| Accuracy: 0.3 | Loss: 0.2913574839977872
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.2246050700223698
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.22180706528272717
+INFO:root:epoch 81 : Training Accuracy 0.63 , Loss 0.233751880733482, Time 0.7497573574384053 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8579802620642506
+INFO:root:start epoch 82
+INFO:root:Iter: 1| Accuracy: 0.75 | Loss: 0.2337265196417088
+INFO:root:Iter: 2| Accuracy: 0.9 | Loss: 0.19915675672095756
+INFO:root:Iter: 3| Accuracy: 1.0 | Loss: 0.18098304245724348
+INFO:root:Iter: 4| Accuracy: 0.85 | Loss: 0.20724810891883533
+INFO:root:Iter: 5| Accuracy: 0.3 | Loss: 0.28437662206766123
+INFO:root:epoch 82 : Training Accuracy 0.76 , Loss 0.21817681728693075, Time 0.7482572515805562 minutes, Validation Accuracy 0.87, Minimal Info Left 0.8375426643480958
+INFO:root:start epoch 83
+INFO:root:Iter: 1| Accuracy: 0.75 | Loss: 0.200959694940259
+INFO:root:Iter: 2| Accuracy: 0.9 | Loss: 0.20568687488812407
+INFO:root:Iter: 3| Accuracy: 0.9 | Loss: 0.17673634332950966
+INFO:root:Iter: 4| Accuracy: 0.35 | Loss: 0.2788425022680503
+INFO:root:Iter: 5| Accuracy: 0.95 | Loss: 0.18381285708444722
+INFO:root:epoch 83 : Training Accuracy 0.77 , Loss 0.20966753643385094, Time 0.7484836498896281 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8614116702542259
+INFO:root:start epoch 84
+INFO:root:Iter: 1| Accuracy: 0.45 | Loss: 0.24509180320651627
+INFO:root:Iter: 2| Accuracy: 0.8 | Loss: 0.20440982002529884
+INFO:root:Iter: 3| Accuracy: 0.6 | Loss: 0.19563210372589013
+INFO:root:Iter: 4| Accuracy: 1.0 | Loss: 0.16904670336219746
+INFO:root:Iter: 5| Accuracy: 0.45 | Loss: 0.26835634384279416
+INFO:root:epoch 84 : Training Accuracy 0.66 , Loss 0.21902970670162195, Time 0.748675553003947 minutes, Validation Accuracy 0.84, Minimal Info Left 0.859954577243368
+INFO:root:start epoch 85
+INFO:root:Iter: 1| Accuracy: 0.65 | Loss: 0.23691946386233048
+INFO:root:Iter: 2| Accuracy: 0.55 | Loss: 0.24540136451303313
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.18053674121778757
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.2152684486418869
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.23967038548331185
+INFO:root:epoch 85 : Training Accuracy 0.7 , Loss 0.2228574134770382, Time 0.7478573679924011 minutes, Validation Accuracy 0.82, Minimal Info Left 0.8645861623118836
+INFO:root:start epoch 86
+INFO:root:Iter: 1| Accuracy: 0.5 | Loss: 0.25886472501521973
+INFO:root:Iter: 2| Accuracy: 0.55 | Loss: 0.24711693274064234
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.19778432839948787
+INFO:root:Iter: 4| Accuracy: 0.85 | Loss: 0.200625452643275
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.2181883302892315
+INFO:root:epoch 86 : Training Accuracy 0.7 , Loss 0.22473240127576305, Time 0.7531078855196635 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8673584192595993
+INFO:root:start epoch 87
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.20906984089401287
+INFO:root:Iter: 2| Accuracy: 0.6 | Loss: 0.22615147583489312
+INFO:root:Iter: 3| Accuracy: 0.7 | Loss: 0.22328574311166632
+INFO:root:Iter: 4| Accuracy: 0.45 | Loss: 0.27510094316006345
+INFO:root:Iter: 5| Accuracy: 0.7 | Loss: 0.2107373897463765
+INFO:root:epoch 87 : Training Accuracy 0.65 , Loss 0.22889364780978594, Time 0.7494869987169902 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8579213734570901
+INFO:root:start epoch 88
+INFO:root:Iter: 1| Accuracy: 0.8 | Loss: 0.19456973426644986
+INFO:root:Iter: 2| Accuracy: 0.4 | Loss: 0.28120446769572266
+INFO:root:Iter: 3| Accuracy: 0.7 | Loss: 0.2032536970206177
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.21245043267361186
+INFO:root:Iter: 5| Accuracy: 0.3 | Loss: 0.29814095791664685
+INFO:root:epoch 88 : Training Accuracy 0.6 , Loss 0.237991657186282, Time 0.7486982425053914 minutes, Validation Accuracy 0.88, Minimal Info Left 0.8777431863039318
+INFO:root:start epoch 89
+INFO:root:Iter: 1| Accuracy: 0.75 | Loss: 0.1952725320304069
+INFO:root:Iter: 2| Accuracy: 0.65 | Loss: 0.23551433392566098
+INFO:root:Iter: 3| Accuracy: 0.85 | Loss: 0.18749637659874102
+INFO:root:Iter: 4| Accuracy: 1.0 | Loss: 0.17364217711681276
+INFO:root:Iter: 5| Accuracy: 0.85 | Loss: 0.20351446158501224
+INFO:root:epoch 89 : Training Accuracy 0.82 , Loss 0.19921173312402696, Time 0.7489906907081604 minutes, Validation Accuracy 0.87, Minimal Info Left 0.8521867808474102
+INFO:root:start epoch 90
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.2203835782825701
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.19097920498759688
+INFO:root:Iter: 3| Accuracy: 0.5 | Loss: 0.25015727571508223
+INFO:root:Iter: 4| Accuracy: 0.95 | Loss: 0.19027862223831143
+INFO:root:Iter: 5| Accuracy: 0.8 | Loss: 0.23986658718496545
+INFO:root:epoch 90 : Training Accuracy 0.73 , Loss 0.21754080278788593, Time 0.7484995762507121 minutes, Validation Accuracy 0.87, Minimal Info Left 0.8600784391203561
+INFO:root:start epoch 91
+INFO:root:Iter: 1| Accuracy: 0.45 | Loss: 0.24732222725709052
+INFO:root:Iter: 2| Accuracy: 0.5 | Loss: 0.26024494936301423
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.20787656257810774
+INFO:root:Iter: 4| Accuracy: 0.85 | Loss: 0.19369577430243248
+INFO:root:Iter: 5| Accuracy: 0.85 | Loss: 0.20420231632534605
+INFO:root:epoch 91 : Training Accuracy 0.69 , Loss 0.22117602965295036, Time 0.7488504568735759 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8587882411592547
+INFO:root:start epoch 92
+INFO:root:Iter: 1| Accuracy: 0.75 | Loss: 0.21483522224944634
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.19172314087710152
+INFO:root:Iter: 3| Accuracy: 0.5 | Loss: 0.24166100476071334
+INFO:root:Iter: 4| Accuracy: 0.65 | Loss: 0.21674808919873434
+INFO:root:Iter: 5| Accuracy: 0.5 | Loss: 0.235274477671082
+INFO:root:epoch 92 : Training Accuracy 0.65 , Loss 0.22156449067103332, Time 0.7479987382888794 minutes, Validation Accuracy 0.83, Minimal Info Left 0.8449542311213704
+INFO:root:start epoch 93
+INFO:root:Iter: 1| Accuracy: 0.65 | Loss: 0.23427415550409494
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.20466982356710242
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.19938546682859454
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.21246569371971144
+INFO:root:Iter: 5| Accuracy: 0.95 | Loss: 0.18061701115025053
+INFO:root:epoch 93 : Training Accuracy 0.79 , Loss 0.20629102145952086, Time 0.7488190690676372 minutes, Validation Accuracy 0.82, Minimal Info Left 0.8690748249426995
+INFO:root:start epoch 94
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.22527069957788992
+INFO:root:Iter: 2| Accuracy: 0.7 | Loss: 0.20616579715454417
+INFO:root:Iter: 3| Accuracy: 0.75 | Loss: 0.2016051337867116
+INFO:root:Iter: 4| Accuracy: 0.9 | Loss: 0.1960168153104615
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.21133745167666973
+INFO:root:epoch 94 : Training Accuracy 0.76 , Loss 0.20910943639763788, Time 0.7480901718139649 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8733845282677726
+INFO:root:start epoch 95
+INFO:root:Iter: 1| Accuracy: 0.7 | Loss: 0.20822098535729702
+INFO:root:Iter: 2| Accuracy: 0.85 | Loss: 0.1965451724597364
+INFO:root:Iter: 3| Accuracy: 0.6 | Loss: 0.24059465738068062
+INFO:root:Iter: 4| Accuracy: 0.7 | Loss: 0.20606859628888513
+INFO:root:Iter: 5| Accuracy: 0.65 | Loss: 0.22605028702232394
+INFO:root:epoch 95 : Training Accuracy 0.7 , Loss 0.21526234380645204, Time 0.7483868916829427 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8693033245216018
+INFO:root:start epoch 96
+INFO:root:Iter: 1| Accuracy: 0.9 | Loss: 0.19926213179896654
+INFO:root:Iter: 2| Accuracy: 0.5 | Loss: 0.2479146947974986
+INFO:root:Iter: 3| Accuracy: 0.9 | Loss: 0.17472637077441822
+INFO:root:Iter: 4| Accuracy: 0.8 | Loss: 0.18937807179446195
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.2234274315459226
+INFO:root:epoch 96 : Training Accuracy 0.77 , Loss 0.20419135045097694, Time 0.7478018601735433 minutes, Validation Accuracy 0.83, Minimal Info Left 0.8488949907587297
+INFO:root:start epoch 97
+INFO:root:Iter: 1| Accuracy: 0.55 | Loss: 0.23825882037603222
+INFO:root:Iter: 2| Accuracy: 1.0 | Loss: 0.1593597557451246
+INFO:root:Iter: 3| Accuracy: 0.5 | Loss: 0.23161386884072138
+INFO:root:Iter: 4| Accuracy: 0.6 | Loss: 0.23197514792664106
+INFO:root:Iter: 5| Accuracy: 0.6 | Loss: 0.2331739884685541
+INFO:root:epoch 97 : Training Accuracy 0.65 , Loss 0.22249935218414246, Time 0.747097373008728 minutes, Validation Accuracy 0.86, Minimal Info Left 0.8761669496891901
+INFO:root:start epoch 98
+INFO:root:Iter: 1| Accuracy: 0.75 | Loss: 0.22751768673494882
+INFO:root:Iter: 2| Accuracy: 0.9 | Loss: 0.18833826272498033
+INFO:root:Iter: 3| Accuracy: 0.9 | Loss: 0.18066497351109484
+INFO:root:Iter: 4| Accuracy: 0.6 | Loss: 0.22454184637257715
+INFO:root:Iter: 5| Accuracy: 0.9 | Loss: 0.17664141995526556
+INFO:root:epoch 98 : Training Accuracy 0.81 , Loss 0.19858940467901381, Time 0.7493443409601848 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8371739536173802
+INFO:root:start epoch 99
+INFO:root:Iter: 1| Accuracy: 0.65 | Loss: 0.23328452577828865
+INFO:root:Iter: 2| Accuracy: 0.75 | Loss: 0.2030751274974297
+INFO:root:Iter: 3| Accuracy: 0.5 | Loss: 0.22910861518714382
+INFO:root:Iter: 4| Accuracy: 0.75 | Loss: 0.21065342314015742
+INFO:root:Iter: 5| Accuracy: 0.75 | Loss: 0.23323956477208324
+INFO:root:epoch 99 : Training Accuracy 0.68 , Loss 0.22178154579732032, Time 0.7481245398521423 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8455830158862495
+INFO:root:start epoch 100
+INFO:root:Iter: 1| Accuracy: 0.75 | Loss: 0.20982658531399498
+INFO:root:Iter: 2| Accuracy: 0.55 | Loss: 0.24681595352568078
+INFO:root:Iter: 3| Accuracy: 0.8 | Loss: 0.21222998369715929
+INFO:root:Iter: 4| Accuracy: 0.4 | Loss: 0.26552072974789465
+INFO:root:Iter: 5| Accuracy: 0.55 | Loss: 0.23657885056665048
+INFO:root:epoch 100 : Training Accuracy 0.61 , Loss 0.23654567020527434, Time 0.747200604279836 minutes, Validation Accuracy 0.85, Minimal Info Left 0.8587153408163363

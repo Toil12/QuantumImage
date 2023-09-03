@@ -12,9 +12,9 @@ import torch
 from torchvision import datasets, transforms
 import pennylane as qml
 
-QUBITS_NUMBER = 4
+QUBITS_NUMBER = 8
 
-dev = qml.device("default.qubit", wires=QUBITS_NUMBER, shots=1000)
+dev = qml.device("lightning.qubit", wires=QUBITS_NUMBER, shots=1000)
 limits=[[-1.37332022,2.18239306],
  [-1.40379974,2.14600127],
  [-1.44892358,1.98171103],
@@ -181,13 +181,14 @@ def image_preprocessing_angle(data:np.ndarray):
 
 if __name__ == '__main__':
     sample_number=100
-    batch_size = 10
+    batch_size = 40
     learning_rate=0.01
-    epoch_number=1
+    epoch_number=100
     layer_number = 2
     embedding_methods="angle"
     seed=0
 
+    print(embedding_methods, sample_number, batch_size, learning_rate, epoch_number, layer_number, seed,QUBITS_NUMBER)
     time_stamp = time.strftime("%d-%H%M%S", time.localtime())
     file_name = f"{embedding_methods}_{time_stamp}"
     logging.basicConfig(level=logging.INFO,
@@ -199,7 +200,8 @@ if __name__ == '__main__':
                  f"epoch number {epoch_number}, "
                  f"layer number {layer_number}, "
                  f"pca parameter {QUBITS_NUMBER}, "
-                 f"numpy random seed {seed}")
+                 f"numpy random seed {seed}, "
+                 f"qubits number {QUBITS_NUMBER}")
     train_loader, test_loader,image_size=get_images(n_samples=sample_number,
                                                     batch_size=batch_size)
 
@@ -225,6 +227,7 @@ if __name__ == '__main__':
         count = 0
         iter=1
         min_info_ratio=1
+        ratio_sum=0
         for batch_idx, (data, target) in enumerate(train_loader):
             encode_images,pca_ratio= image_preprocessing_angle(data)
             min_info_ratio=min(min_info_ratio,pca_ratio)

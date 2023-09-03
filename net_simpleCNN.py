@@ -8,12 +8,9 @@ import torch.nn.functional as F
 
 from torch.autograd import Variable
 from torchvision import datasets, transforms
-
+from npy_append_array import NpyAppendArray
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-
-
 def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
     # Concentrating on the first 100 samples
     n_samples = n_samples
@@ -88,18 +85,27 @@ class CNN(nn.Module):
 def train(num_epochs,loaders,epoch):
     # loss_func = nn.()
     cnn.train()
+    training_loss=0
     # Train the model
     total_step = len(loaders['train'])
-
+    samples=0
+    correct_epoch=0
     for i, (images, labels) in enumerate(loaders['train']):
+        correct = 0
         # gives batch data, normalize x when iterate train_loader
         b_x = Variable(images)  # batch x
         b_y = Variable(labels)  # batch y
 
         output = cnn(b_x)[0]
+
+        training_loss += F.nll_loss(output, b_y, reduction='sum').item()
+        pred = output.data.max(1, keepdim=True)[1]
+        samples+=len(b_y)
+        correct += pred.eq(b_y.data.view_as(pred)).sum()
+        correct_epoch+= pred.eq(b_y.data.view_as(pred)).sum()
+        accuracy_train_iteration=correct / b_y.shape[0]
         # print(b_y.shape)
         # print(output.shape)
-
         loss = F.nll_loss(output,b_y)
         # clear gradients for this training step
         optimizer.zero_grad()
@@ -109,10 +115,15 @@ def train(num_epochs,loaders,epoch):
         optimizer.step()
         # print(i)
         if (i+1)%5==0:
-            print('Epoch [{}/{}], Iteration [{}/{}], Loss: {:.4f}'
-                  .format(epoch + 1, num_epochs, i + 1, total_step, loss.item())
+            print('Epoch [{}/{}], Iteration [{}/{}], Loss: {:.4f}, Accuracy: {:.4f}'
+                  .format(epoch + 1,
+                          num_epochs, i + 1,
+                          total_step, loss.item(),
+                          accuracy_train_iteration)
                   )
-
+            logging.info(f"Iter: {i+1}| Accuracy: {accuracy_train_iteration} | Loss: {loss}")
+    training_loss/=samples
+    return correct_epoch / samples,training_loss
 def test(loaders):
     cnn.eval()
     test_loss=0
@@ -123,11 +134,16 @@ def test(loaders):
             test_loss += F.nll_loss(output, target,reduction='sum').item()
             pred = output.data.max(1, keepdim=True)[1]
             correct += pred.eq(target.data.view_as(pred)).sum()
+    accuracy_test=correct / len(test_loader.dataset)
     test_loss /= len(test_loader.dataset)
-    # test_losses.append(test_loss)
-    print('\nTest set: Avg. loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-        test_loss, correct, len(test_loader.dataset),
-        100. * correct / len(test_loader.dataset)))
+    # print('\nTest set: Avg. loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.
+    # format(
+    #     test_loss, correct,
+    #     len(test_loader.dataset),
+    #     accuracy_test
+    #     )
+    # )
+    return accuracy_test
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='parameters')
@@ -176,6 +192,35 @@ if __name__ == '__main__':
     num_epochs = 10
     optimizer = torch.optim.NAdam(cnn.parameters(), lr=0.01)
 
+    # start training
+    npaa_record = NpyAppendArray(f"./data/loss_epoch/{file_name}_loss.npy")
+    models_path=f"./data/model/{file_name}_models.npy"
+    # 'epoch number' for each epoch model, last is the optimizer
+    models={}
     for epoch in range(num_epochs):
-        train(num_epochs, loaders,epoch)
-        test(loaders)
+        time_start=time.time()
+        print("start epoch {}".format(epoch + 1))
+        logging.info(f"start epoch {epoch + 1}")
+        epoch_acc,epoch_cost=train(num_epochs, loaders,epoch)
+        epoch_acc_val=test(loaders)
+        time_end=time.time()
+        time_cost=time_end-time_start
+        record_item = np.array([[epoch_acc, epoch_cost, epoch_acc_val]])
+        npaa_record.append(record_item)
+        print("epoch {} : "
+              "Accuracy {} , "
+              "Loss {}, "
+              "Time {}, "
+              "Val Accuracy {}\n".format(epoch + 1, epoch_acc, epoch_cost, time_cost, epoch_acc_val))
+        logging.info(f"epoch {epoch + 1} : "
+                     f"Training Accuracy {epoch_acc} , "
+                     f"Loss {epoch_cost}, "
+                     f"Time {time_cost} minutes, "
+                     f"Validation Accuracy {epoch_acc_val}")
+
+        # put the model into dictionary
+        model=cnn.state_dict()
+        models[epoch]=model
+    models['optimizer']=optimizer.state_dict()
+    npaa_record.close()
+    torch.save(models,models_path)

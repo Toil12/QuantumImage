@@ -15,8 +15,8 @@ import time
 import logging
 
 # file_name=time.strftime("%d-%H%M%S", time.localtime())
-
-dev_7 = qml.device("default.qubit", wires=7, shots=1000)
+device="lightning.qubit"
+dev_7 = qml.device(device, wires=7, shots=1000)
 
 def encode_circuit(qubits_num, section_number, x):
     # print(qubits_num,section_number,parameters)
@@ -176,7 +176,7 @@ def image_preprocessing(data:np.ndarray,image_size:int=64):
     for image in data:
         # sequentialize the image
         image_sequence = image.ravel()
-        # pre processing
+        # pre-processing, black is 0, white is 1
         for pos in range(len(image_sequence)):
             image_sequence[pos] = image_sequence[pos] * pi / 2
         # print("complete image is",image_sequence)
@@ -192,10 +192,10 @@ if __name__ == '__main__':
     parser.add_argument('--method', type=str, help='FRQI/angle/amplitude', default="FRQI")
     parser.add_argument('--sample', type=int, help='number of samples', default=50)
     parser.add_argument('--lr', type=float, help='learning rate', default=0.01)
-    parser.add_argument('--batch', type=int, help='batch size', default=5)
+    parser.add_argument('--batch', type=int, help='batch size', default=10)
     parser.add_argument('--epoch', type=int, help='epoch numbers', default=50)
-    parser.add_argument('--layer', type=int, help='ansatz layer numbers', default=1)
-    parser.add_argument('--seed', type=float, help='numpy random seed', default=0)
+    parser.add_argument('--layer', type=int, help='ansatz layer numbers', default=2)
+    parser.add_argument('--seed', type=float, help='numpy random seed', default=100)
     args = vars(parser.parse_args())
     # set hyper parameters
     embedding_methods = args['method']
@@ -206,7 +206,7 @@ if __name__ == '__main__':
     layer_number = args['layer']
     seed=args['seed']
 
-    print(embedding_methods, sample_number, batch_size, learning_rate, epoch_number, layer_number)
+    print(embedding_methods, sample_number, batch_size, learning_rate, epoch_number, layer_number,seed,device)
 
     # set file name
     time_stamp=time.strftime("%d-%H%M%S", time.localtime())
@@ -220,7 +220,8 @@ if __name__ == '__main__':
                  f"learning rate {learning_rate}, "
                  f"epoch number {epoch_number}, "
                  f"layer number {layer_number}, "
-                 f"numpy random seed {seed}")
+                 f"numpy random seed {seed}, "
+                 f"device {device}")
 
     train_loader, test_loader,image_size=get_images(n_samples=sample_number,
                                                     batch_size=batch_size)
