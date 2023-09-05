@@ -183,12 +183,12 @@ def p_type(number):
 
 if __name__ == '__main__':
     sample_number=50
-    batch_size = 20
+    batch_size = 10
     learning_rate=0.01
     epoch_number=50
     layer_number = 2
     embedding_methods="amplitude"
-    seed=0
+    seed=1000
 
     print(embedding_methods, sample_number, batch_size, learning_rate, epoch_number, layer_number, seed)
     time_stamp = time.strftime("%d-%H%M%S", time.localtime())
