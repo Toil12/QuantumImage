@@ -1,0 +1,2 @@
+INFO:root:embedding methods CNN, sample number 50, batch size 5, learning rate 0.01, epoch number 50, layer number 1, numpy random seed 0
+INFO:root:start epoch 1

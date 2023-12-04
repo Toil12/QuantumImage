@@ -9,6 +9,7 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 from torchvision import datasets, transforms
 from npy_append_array import NpyAppendArray
+from torchviz import  make_dot
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
@@ -21,7 +22,7 @@ def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
                              transform=transforms.Compose([transforms.Grayscale(),
                                                            transforms.ToTensor(),
                                                            # transforms.Normalize((0.1307,), (0.3081,)),
-                                                           # transforms.Resize([rows, cols])
+                                                           transforms.Resize([rows, cols])
                                                            ]))
 
     # Leaving only labels 0 and 1
@@ -37,16 +38,17 @@ def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
     X_test = datasets.MNIST(root='./data', train=False, download=True,
                             transform=transforms.Compose([transforms.Grayscale(),
                                                           transforms.ToTensor(),
-                                                          # transforms.Resize([rows, cols])
+                                                          transforms.Resize([rows, cols])
                                                           ]))
-
-    idx = np.append(np.where(X_test.targets == 0)[0][:n_samples],
-                    np.where(X_test.targets == 1)[0][:n_samples])
+    test_data_factor=10
+    idx = np.append(np.where(X_test.targets == 0)[0][:n_samples*test_data_factor],
+                    np.where(X_test.targets == 1)[0][:n_samples*test_data_factor])
+    print(idx.shape)
 
     X_test.data = X_test.data[idx]
     X_test.targets = X_test.targets[idx]
 
-    test_loader = torch.utils.data.DataLoader(X_test, batch_size=n_samples*10, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(X_test, batch_size=n_samples*test_data_factor, shuffle=True)
     return train_loader,test_loader,rows*cols
 
 
@@ -65,12 +67,12 @@ class CNN(nn.Module):
             nn.MaxPool2d(kernel_size=2),
         )
         self.conv2 = nn.Sequential(
-            nn.Conv2d(16, 32, 5, 1, 2),
+            nn.Conv2d(16, 32, 3, 1, 1),
             nn.ReLU(),
             nn.MaxPool2d(2),
         )
         # fully connected layer, output 2 classes
-        self.fc = nn.Linear(1568, 2)
+        self.fc = nn.Linear(128, 2)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -80,9 +82,10 @@ class CNN(nn.Module):
 
         x = self.fc(x)
         output=F.log_softmax(x,dim=1)
-        return output, x    # return x for visualization
+        return output,x    # return x for visualization
 
 def train(num_epochs,loaders,epoch):
+
     # loss_func = nn.()
     cnn.train()
     training_loss=0
@@ -95,9 +98,13 @@ def train(num_epochs,loaders,epoch):
         # gives batch data, normalize x when iterate train_loader
         b_x = Variable(images)  # batch x
         b_y = Variable(labels)  # batch y
-
+        # make_dot(cnn(b_x), params=dict(cnn.named_parameters())).render("cnn_torchviz", format="png")
         output = cnn(b_x)[0]
+        #
+        model_scripted = torch.jit.script(cnn)
+        model_scripted.save('cnn_scripted.pt')
 
+        #
         training_loss += F.nll_loss(output, b_y, reduction='sum').item()
         pred = output.data.max(1, keepdim=True)[1]
         samples+=len(b_y)
@@ -133,6 +140,7 @@ def test(loaders):
             output = cnn(data)[0]
             test_loss += F.nll_loss(output, target,reduction='sum').item()
             pred = output.data.max(1, keepdim=True)[1]
+            print(pred.shape)
             correct += pred.eq(target.data.view_as(pred)).sum()
     accuracy_test=correct / len(test_loader.dataset)
     test_loss /= len(test_loader.dataset)
@@ -151,7 +159,7 @@ if __name__ == '__main__':
     parser.add_argument('--sample', type=int, help='number of samples', default=50)
     parser.add_argument('--lr', type=float, help='learning rate', default=0.01)
     parser.add_argument('--batch', type=int, help='batch size', default=5)
-    parser.add_argument('--epoch', type=int, help='epoch numbers', default=20)
+    parser.add_argument('--epoch', type=int, help='epoch numbers', default=50)
     parser.add_argument('--layer', type=int, help='ansatz layer numbers', default=1)
     parser.add_argument('--seed', type=float, help='numpy random seed', default=0)
     args = vars(parser.parse_args())
@@ -163,6 +171,7 @@ if __name__ == '__main__':
     epoch_number = args['epoch']
     layer_number = args['layer']
     seed=args['seed']
+    num_epochs = args['epoch']
 
     print(embedding_methods, sample_number, batch_size, learning_rate, epoch_number, layer_number)
 
@@ -189,8 +198,9 @@ if __name__ == '__main__':
 
     # training part
     cnn = CNN()
-    num_epochs = 10
     optimizer = torch.optim.NAdam(cnn.parameters(), lr=0.01)
+
+
 
     # start training
     npaa_record = NpyAppendArray(f"./data/loss_epoch/{file_name}_loss.npy")

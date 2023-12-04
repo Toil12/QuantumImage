@@ -1,0 +1,60 @@
+INFO:root:embedding methods CNN, sample number 50, batch size 5, learning rate 0.01, epoch number 50, layer number 1, numpy random seed 0
+INFO:root:start epoch 1
+INFO:root:Iter: 5| Accuracy: 0.6000000238418579 | Loss: 0.6782852411270142
+INFO:root:Iter: 10| Accuracy: 1.0 | Loss: 0.4410061836242676
+INFO:root:Iter: 15| Accuracy: 1.0 | Loss: 0.2185213565826416
+INFO:root:Iter: 20| Accuracy: 1.0 | Loss: 0.04057001322507858
+INFO:root:epoch 1 : Training Accuracy 0.800000011920929 , Loss 0.39095247149467466, Time 0.6245450973510742 minutes, Validation Accuracy 0.9758865237236023
+INFO:root:start epoch 2
+INFO:root:Iter: 5| Accuracy: 1.0 | Loss: 0.021851617842912674
+INFO:root:Iter: 10| Accuracy: 1.0 | Loss: 0.015202340669929981
+INFO:root:Iter: 15| Accuracy: 1.0 | Loss: 0.0006981446640565991
+INFO:root:Iter: 20| Accuracy: 1.0 | Loss: 0.005629503633826971
+INFO:root:epoch 2 : Training Accuracy 0.9700000286102295 , Loss 0.04682684348255862, Time 0.5618739128112793 minutes, Validation Accuracy 0.9900709390640259
+INFO:root:start epoch 3
+INFO:root:Iter: 5| Accuracy: 1.0 | Loss: 0.0031021111644804478
+INFO:root:Iter: 10| Accuracy: 1.0 | Loss: 5.2593444706872106e-05
+INFO:root:Iter: 15| Accuracy: 1.0 | Loss: 0.0019844002090394497
+INFO:root:Iter: 20| Accuracy: 1.0 | Loss: 0.0005102367140352726
+INFO:root:epoch 3 : Training Accuracy 1.0 , Loss 0.0030862174452340697, Time 0.5689818859100342 minutes, Validation Accuracy 0.9895980954170227
+INFO:root:start epoch 4
+INFO:root:Iter: 5| Accuracy: 1.0 | Loss: 0.0010148466099053621
+INFO:root:Iter: 10| Accuracy: 1.0 | Loss: 0.001462451764382422
+INFO:root:Iter: 15| Accuracy: 1.0 | Loss: 0.0016052264254540205
+INFO:root:Iter: 20| Accuracy: 1.0 | Loss: 0.00038897397462278605
+INFO:root:epoch 4 : Training Accuracy 1.0 , Loss 0.001978844215773279, Time 0.556032657623291 minutes, Validation Accuracy 0.9914893507957458
+INFO:root:start epoch 5
+INFO:root:Iter: 5| Accuracy: 1.0 | Loss: 0.0009009927744045854
+INFO:root:Iter: 10| Accuracy: 1.0 | Loss: 0.0024142456240952015
+INFO:root:Iter: 15| Accuracy: 1.0 | Loss: 1.2278364920348395e-05
+INFO:root:Iter: 20| Accuracy: 1.0 | Loss: 3.707244468387216e-05
+INFO:root:epoch 5 : Training Accuracy 1.0 , Loss 0.0008216240011461195, Time 0.5488288402557373 minutes, Validation Accuracy 0.9900709390640259
+INFO:root:start epoch 6
+INFO:root:Iter: 5| Accuracy: 1.0 | Loss: 0.0016899578040465713
+INFO:root:Iter: 10| Accuracy: 1.0 | Loss: 3.1279621907742694e-05
+INFO:root:Iter: 15| Accuracy: 1.0 | Loss: 0.000470462633529678
+INFO:root:Iter: 20| Accuracy: 1.0 | Loss: 0.00013473568833433092
+INFO:root:epoch 6 : Training Accuracy 1.0 , Loss 0.0006005207919952227, Time 0.5505807399749756 minutes, Validation Accuracy 0.9905437231063843
+INFO:root:start epoch 7
+INFO:root:Iter: 5| Accuracy: 1.0 | Loss: 0.0003789486945606768
+INFO:root:Iter: 10| Accuracy: 1.0 | Loss: 0.002024461282417178
+INFO:root:Iter: 15| Accuracy: 1.0 | Loss: 0.0020414593163877726
+INFO:root:Iter: 20| Accuracy: 1.0 | Loss: 8.6242776887957e-05
+INFO:root:epoch 7 : Training Accuracy 1.0 , Loss 0.00048047829324787016, Time 0.5338649749755859 minutes, Validation Accuracy 0.9914893507957458
+INFO:root:start epoch 8
+INFO:root:Iter: 5| Accuracy: 1.0 | Loss: 3.108766031800769e-05
+INFO:root:Iter: 10| Accuracy: 1.0 | Loss: 0.000922487408388406
+INFO:root:Iter: 15| Accuracy: 1.0 | Loss: 0.00022279893164522946
+INFO:root:Iter: 20| Accuracy: 1.0 | Loss: 2.670279855010449e-06
+INFO:root:epoch 8 : Training Accuracy 1.0 , Loss 0.0003910911679486162, Time 0.547011137008667 minutes, Validation Accuracy 0.991962194442749
+INFO:root:start epoch 9
+INFO:root:Iter: 5| Accuracy: 1.0 | Loss: 3.394956365809776e-05
+INFO:root:Iter: 10| Accuracy: 1.0 | Loss: 0.0006608769181184471
+INFO:root:Iter: 15| Accuracy: 1.0 | Loss: 1.3112662600178737e-05
+INFO:root:Iter: 20| Accuracy: 1.0 | Loss: 0.0012464172905310988
+INFO:root:epoch 9 : Training Accuracy 1.0 , Loss 0.0003234315188819892, Time 0.5581989288330078 minutes, Validation Accuracy 0.991962194442749
+INFO:root:start epoch 10
+INFO:root:Iter: 5| Accuracy: 1.0 | Loss: 1.5258772236848017e-06
+INFO:root:Iter: 10| Accuracy: 1.0 | Loss: 4.470059138839133e-05
+INFO:root:Iter: 15| Accuracy: 1.0 | Loss: 5.006788228456571e-07
+INFO:root:Iter: 20| Accuracy: 1.0 | Loss: 0.0009126816876232624

@@ -43,7 +43,9 @@ def encode_circuit(qubits_num, section_number, x):
 def ansatz_layer(W,qubits_num:int=7):
     # print("weights inside the circuit",W)
     for i in range(qubits_num):
-        qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
+        # qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
+        qml.RX(W[i, 0], wires=i)
+        qml.RY(W[i, 1], wires=i)
         if i !=qubits_num-1:
             qml.CNOT(wires=[i, i+1])
         else:
@@ -190,12 +192,12 @@ if __name__ == '__main__':
     # parametes for testing
     parser = argparse.ArgumentParser(description='parameters')
     parser.add_argument('--method', type=str, help='FRQI/angle/amplitude', default="FRQI")
-    parser.add_argument('--sample', type=int, help='number of samples', default=50)
+    parser.add_argument('--sample', type=int, help='number of samples', default=100)
     parser.add_argument('--lr', type=float, help='learning rate', default=0.01)
-    parser.add_argument('--batch', type=int, help='batch size', default=10)
+    parser.add_argument('--batch', type=int, help='batch size', default=20)
     parser.add_argument('--epoch', type=int, help='epoch numbers', default=50)
     parser.add_argument('--layer', type=int, help='ansatz layer numbers', default=2)
-    parser.add_argument('--seed', type=float, help='numpy random seed', default=100)
+    parser.add_argument('--seed', type=float, help='numpy random seed', default=0)
     args = vars(parser.parse_args())
     # set hyper parameters
     embedding_methods = args['method']
@@ -227,7 +229,7 @@ if __name__ == '__main__':
                                                     batch_size=batch_size)
     # initialize weights and bias
     np.random.seed(seed)
-    weights_init = 0.01 * np.random.randn(layer_number, 7, 3, requires_grad=True)
+    weights_init = 0.01 * np.random.randn(layer_number, 7, 2, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
     opt = NesterovMomentumOptimizer(learning_rate)
     weights = weights_init

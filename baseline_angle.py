@@ -12,7 +12,7 @@ import torch
 from torchvision import datasets, transforms
 import pennylane as qml
 
-QUBITS_NUMBER = 8
+QUBITS_NUMBER = 3
 
 dev = qml.device("lightning.qubit", wires=QUBITS_NUMBER, shots=1000)
 limits=[[-1.37332022,2.18239306],
@@ -35,11 +35,15 @@ def encode_circuit_angle(a,qubits_number):
     for i in range(qubits_number):
         # angle=(a[i]-limits[i][0])/(limits[i][1]-limits[i][0])*np.pi
         angle=np.arctan(a[i])
-        qml.RX(angle,wires=i)
+        # try RX or RY
+        qml.RY(angle,wires=i)
 
 def ansatz_layer(W,qubits_num):
     for i in range(qubits_num):
-        qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
+        # try RX or RY optional
+        # qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
+        qml.RX(W[i, 0], wires=i)
+        qml.RY(W[i, 1], wires=i)
         if i !=qubits_num-1:
             qml.CNOT(wires=[i, i+1])
         else:
@@ -123,7 +127,7 @@ def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
     X_test.data = X_test.data[idx]
     X_test.targets = X_test.targets[idx]
 
-    test_loader = torch.utils.data.DataLoader(X_test, batch_size=n_samples*2, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(X_test, batch_size=n_samples*2000, shuffle=True)
     n_samples_show = 6
     return train_loader,test_loader,rows*cols
 
@@ -181,8 +185,8 @@ def image_preprocessing_angle(data:np.ndarray):
 
 if __name__ == '__main__':
     sample_number=100
-    batch_size = 40
-    learning_rate=0.01
+    batch_size = 20
+    learning_rate=0.3
     epoch_number=100
     layer_number = 2
     embedding_methods="angle"
@@ -208,7 +212,7 @@ if __name__ == '__main__':
     start_time=time.time()
     # initialize weights and bias
     np.random.seed(seed)
-    weights_init = 0.01 * np.random.randn(layer_number, QUBITS_NUMBER, 3, requires_grad=True)
+    weights_init = 0.01 * np.random.randn(layer_number, QUBITS_NUMBER, 2, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
     opt = NesterovMomentumOptimizer(learning_rate)
     weights = weights_init

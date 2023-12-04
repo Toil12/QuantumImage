@@ -38,7 +38,9 @@ def encode_circuit_amplitude(f,qubits_number):
 
 def ansatz_layer(W,qubits_num):
     for i in range(qubits_num):
-        qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
+        # qml.Rot(W[i, 0], W[i, 1], W[i, 2], wires=i)
+        qml.RX(W[i, 0], wires=i)
+        qml.RY(W[i, 1], wires=i)
         if i !=qubits_num-1:
             qml.CNOT(wires=[i, i+1])
         else:
@@ -124,7 +126,7 @@ def get_images(n_samples:int=100,r:int=8,c:int=8,batch_size:int=5):
     X_test.data = X_test.data[idx]
     X_test.targets = X_test.targets[idx]
 
-    test_loader = torch.utils.data.DataLoader(X_test, batch_size=n_samples*2, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(X_test, batch_size=n_samples*2000, shuffle=True)
     n_samples_show = 6
     return train_loader,test_loader,rows*cols
 
@@ -184,11 +186,11 @@ def p_type(number):
 if __name__ == '__main__':
     sample_number=50
     batch_size = 10
-    learning_rate=0.01
+    learning_rate=0.3
     epoch_number=50
     layer_number = 2
     embedding_methods="amplitude"
-    seed=1000
+    seed=0
 
     print(embedding_methods, sample_number, batch_size, learning_rate, epoch_number, layer_number, seed)
     time_stamp = time.strftime("%d-%H%M%S", time.localtime())
@@ -208,7 +210,7 @@ if __name__ == '__main__':
     start_time=time.time()
     # initialize weights and bias
     np.random.seed(seed)
-    weights_init = 0.01 * np.random.randn(layer_number, QUBITS_NUMBER, 3, requires_grad=True)
+    weights_init = 0.01 * np.random.randn(layer_number, QUBITS_NUMBER, 2, requires_grad=True)
     bias_init = np.array(0.01, requires_grad=True)
     opt = NesterovMomentumOptimizer(learning_rate)
     weights = weights_init
@@ -279,12 +281,12 @@ if __name__ == '__main__':
                      f"Loss {epoch_cost}, "
                      f"Time {time_cost} minutes, "
                      f"Validation Accuracy {epoch_acc_val}")
-        # save results to file
-        npaa_record.append(record_item)
+        # save model
         weights_store = np.array(weights).ravel()
         model = np.append(weights_store, bias)
         model = np.array([model])
-        npaa_model.append(model)
+        # save result
+        npaa_record.append(record_item)
         npaa_model.append(model)
 
     npaa_record.close()

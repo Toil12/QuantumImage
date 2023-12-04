@@ -1,0 +1,2 @@
+INFO:root:embedding methods FRQI, sample number 100, batch size 20, learning rate 0.01, epoch number 50, layer number 2, numpy random seed 0, device lightning.qubit
+INFO:root:start epoch 1

@@ -1,13 +1,14 @@
 from matplotlib import pyplot as plt
 import numpy as np
 
-file_name="FRQI_31-212855"
+file_name="CNN_16-214801"
 path1=f"data/loss_epoch/{file_name}_loss.npy"
 # path1=f"data/loss_epoch/{name1}"
 
 array=np.load(path1)
 
 x=range(len(array))
+# x=range(50)
 t_acc=array[:,0]
 loss=array[:,1]
 v_acc=array[:,2]
@@ -19,7 +20,7 @@ ax=fig.add_subplot(111)
 ax.set_title(f"{file_name.split('_')[0]} embedding")
 
 lns1=ax.plot(x,t_acc,'-b',label='train acc')
-lns2=ax.plot(x,v_acc,'-r',label='validation acc')
+lns2=ax.plot(x,v_acc,'-r',label='test acc')
 
 ax2=ax.twinx()
 lns3=ax2.plot(x,loss,':y',label='loss')

@@ -1,0 +1,2 @@
+INFO:root:embedding methods angle, sample number 50, batch size 5, learning rate 0.1, epoch number 50, layer number 3, pca parameter 8, numpy random seed 0, qubits number 8
+INFO:root:start epoch 1

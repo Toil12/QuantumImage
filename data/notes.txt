@@ -13,3 +13,9 @@
 
 07.07
 1.Amplitude:differential and warning
+
+24.11
+1.accuracy level,test and training-done
+2.tendency of the loss-done
+3.overfitting, test accuracy>training accuracy
+4.quibts number for angle embedding-done

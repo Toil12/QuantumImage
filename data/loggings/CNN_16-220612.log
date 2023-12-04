@@ -1,0 +1,7 @@
+INFO:root:embedding methods CNN, sample number 50, batch size 5, learning rate 0.01, epoch number 1, layer number 1, numpy random seed 0
+INFO:root:start epoch 1
+INFO:root:Iter: 5| Accuracy: 1.0 | Loss: -0.5388980507850647
+INFO:root:Iter: 10| Accuracy: 0.800000011920929 | Loss: -0.6237874627113342
+INFO:root:Iter: 15| Accuracy: 1.0 | Loss: -0.8954121470451355
+INFO:root:Iter: 20| Accuracy: 1.0 | Loss: -0.9844160079956055
+INFO:root:epoch 1 : Training Accuracy 0.7900000214576721 , Loss -0.6882650327682495, Time 0.4993472099304199 minutes, Validation Accuracy 0.9700000286102295
