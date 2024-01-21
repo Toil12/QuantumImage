@@ -43,14 +43,12 @@ def get_images(n_samples,r:int=8,c:int=8,batch_size:int=5):
     test_data_factor=10
     idx = np.append(np.where(X_test.targets == 0)[0][:n_samples*test_data_factor],
                     np.where(X_test.targets == 1)[0][:n_samples*test_data_factor])
-    print(idx.shape)
-
+    # print(idx.shape)
     X_test.data = X_test.data[idx]
     X_test.targets = X_test.targets[idx]
 
     test_loader = torch.utils.data.DataLoader(X_test, batch_size=n_samples*test_data_factor, shuffle=True)
     return train_loader,test_loader,rows*cols
-
 
 class CNN(nn.Module):
     def __init__(self):
@@ -77,7 +75,6 @@ class CNN(nn.Module):
     def forward(self, x):
         x = self.conv1(x)
         x = self.conv2(x)
-        # flatten the output of conv2 to (batch_size, 32 * 7 * 7)
         x = x.view(x.size(0), -1)
 
         x = self.fc(x)
@@ -100,19 +97,20 @@ def train(num_epochs,loaders,epoch):
         b_y = Variable(labels)  # batch y
         # make_dot(cnn(b_x), params=dict(cnn.named_parameters())).render("cnn_torchviz", format="png")
         output = cnn(b_x)[0]
-        #
-        model_scripted = torch.jit.script(cnn)
-        model_scripted.save('cnn_scripted.pt')
-
-        #
-        training_loss += F.nll_loss(output, b_y, reduction='sum').item()
+        # print(b_y)
+        judege=np.zeros(shape=(output.shape[0],))
+        for i in range(output.shape[0]):
+            if output[i,0]>=output[i,1]:
+                judege[i]=0
+            else:
+                judege[i]=1
+        judege=torch.tensor(judege)
+        training_loss += F.mse_loss(judege, b_y, reduction='sum').item()
         pred = output.data.max(1, keepdim=True)[1]
         samples+=len(b_y)
         correct += pred.eq(b_y.data.view_as(pred)).sum()
         correct_epoch+= pred.eq(b_y.data.view_as(pred)).sum()
         accuracy_train_iteration=correct / b_y.shape[0]
-        # print(b_y.shape)
-        # print(output.shape)
         loss = F.nll_loss(output,b_y)
         # clear gradients for this training step
         optimizer.zero_grad()
@@ -138,19 +136,22 @@ def test(loaders):
     with torch.no_grad():
         for i,(data, target) in enumerate(loaders['test']):
             output = cnn(data)[0]
-            test_loss += F.nll_loss(output, target,reduction='sum').item()
+            #
+            judege = np.zeros(shape=(output.shape[0],))
+            for i in range(output.shape[0]):
+                if output[i, 0] >= output[i, 1]:
+                    judege[i] = 0
+                else:
+                    judege[i] = 1
+            judege = torch.tensor(judege)
+            #
+            test_loss += F.mse_loss(judege, target,reduction='sum').item()
             pred = output.data.max(1, keepdim=True)[1]
-            print(pred.shape)
+            # print(pred.shape)
             correct += pred.eq(target.data.view_as(pred)).sum()
     accuracy_test=correct / len(test_loader.dataset)
     test_loss /= len(test_loader.dataset)
-    # print('\nTest set: Avg. loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.
-    # format(
-    #     test_loss, correct,
-    #     len(test_loader.dataset),
-    #     accuracy_test
-    #     )
-    # )
+
     return accuracy_test
 
 if __name__ == '__main__':
@@ -199,7 +200,6 @@ if __name__ == '__main__':
     # training part
     cnn = CNN()
     optimizer = torch.optim.NAdam(cnn.parameters(), lr=0.01)
-
 
 
     # start training

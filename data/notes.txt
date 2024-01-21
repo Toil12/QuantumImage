@@ -19,3 +19,18 @@
 2.tendency of the loss-done
 3.overfitting, test accuracy>training accuracy
 4.quibts number for angle embedding-done
+
+22.12
+1.fix grammar and spells
+2.extending and deepr contents for arbitrary functions including angle and amplitude, and the specific image embedding method  FRQI, the concepts, ideas of your
+3.formulas and all with publications rather than from internets
+4.conclusion extension, introduction extension
+
+function described
+
+citation pages
+
+12.01
+1.citation of the functions, necessary switched by article or book
+2.citation of the reference
+3.the preparation of the slides,time for presentation and time for Q&A, pages
